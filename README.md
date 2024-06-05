@@ -1,2 +1,20 @@
 # tinyso3
-TinySO(3): A Lightweight C++ Library for 3D Rotations.
+TinySO3 is a compact and efficient library designed to handle 3D rotations using various mathematical representations including rotation matrices, quaternions, and Lie groups (SO(3)). Whether you're working on robotics, computer graphics, or aerospace applications, TinySO3 provides the essential tools for managing and manipulating 3D rotational data with precision and ease.
+
+## Features
+- Rotation Matrices: Functions for creating, transforming, and composing rotation matrices.
+- Quaternions: Comprehensive support for quaternion algebra, including conversion, interpolation, and normalization.
+- Axis Angle: Tools for representing and converting rotations using the axis-angle representation.
+- Euler Angles: Support for multiple Euler angle conventions and conversion between Euler angles and other representations.
+- Lie Groups: Efficient methods for working with Lie group representations of rotations, specifically SO(3).
+- Interoperability: Seamless conversion between different rotation representations.
+- Performance: Optimized for speed and minimal memory usage, making it suitable for real-time applications.
+
+## Example
+
+## Testing
+
+## Formatting
+
+## License
+* (BSD) The Matrix library is licensed under a permissive 3-clause BSD license. Contributions must be made under the same license.
