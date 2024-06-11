@@ -12,9 +12,25 @@ TinySO3 is a compact and efficient library designed to handle 3D rotations using
 
 ## Example
 
+### WIP
+- Configuration Setup
+- Set floating point type : float, double, long double ...
+- Default setup : RotationMatrix : Active(Alibi) / Passive()  / Hamiltonion or JPL (quaternion -wxyz, xyzw) 
+...
+
 ## Testing
 
 ## Formatting
+
+### Requirements
+- **cmake-format**
+- **clang-format**
+- **mkdocs**, **mkdocs-material**, **pymdown-extensions**
+- **kconfiglib**
+```
+pip install cmake-format mkdocs mkdocs-material pymdown-extensions kconfiglib
+sudo apt install clang-format 
+```
 
 ## License
 * (BSD) The Matrix library is licensed under a permissive 3-clause BSD license. Contributions must be made under the same license.
