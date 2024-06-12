@@ -1,2 +1,11 @@
 mainmenu "tinyso3"
 
+choice
+     prompt "Default floating point precision"
+     default FLOAT
+config DEFAULT_FLOATING_POINT_PRECISION_32
+     bool "float(32)"
+config DEFAULT_FLOATING_POINT_PRECISION_64
+     bool "double(64)"
+endchoice
+

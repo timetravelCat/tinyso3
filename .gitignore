@@ -40,3 +40,4 @@ site
 
 ### Kconfig ###
 *.config
+*.config.old
