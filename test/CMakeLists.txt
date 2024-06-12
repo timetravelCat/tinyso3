@@ -1,22 +1,17 @@
 message(STATUS "Configuring tests")
 
-include(FetchContent)
+# include(FetchContent)
 
-set(CATCH_INSTALL_DOCS
-    OFF
-    CACHE INTERNAL "")
-set(CATCH_INSTALL_EXTRAS
-    OFF
-    CACHE INTERNAL "")
+# set(CATCH_INSTALL_DOCS OFF CACHE INTERNAL "") set(CATCH_INSTALL_EXTRAS OFF
+# CACHE INTERNAL "")
 
-FetchContent_Declare(
-  Catch2
-  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG v3.4.0 # or a later release
-)
-FetchContent_MakeAvailable(Catch2)
+# FetchContent_Declare( Catch2 GIT_REPOSITORY
+# https://github.com/catchorg/Catch2.git GIT_TAG v3.4.0 # or a later release )
+# FetchContent_MakeAvailable(Catch2)
 
-list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+# list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras) include(Catch)
+
+find_package(Catch2 3 REQUIRED)
 include(Catch)
 
 file(GLOB_RECURSE TESTS *.cpp)
