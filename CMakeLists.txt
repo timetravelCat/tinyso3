@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16.3)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(parse_git_tag)
 include(add_compile_warnings)
+include(static_analyzers)
 
 # Set the project name and version
 project(
@@ -26,9 +27,13 @@ file(GLOB_RECURSE SOURCES include/tinyso3/*.cpp)
 add_library(${PROJECT_NAME} ${SOURCES})
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 add_compile_warnings(${PROJECT_NAME})
+target_include_directories(
+  ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+                         $<INSTALL_INTERFACE:include>)
 
 # Testing setup
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  option(BUILD_TESTING "" OFF) # Set to OFF by default
   include(CTest)
   if(BUILD_TESTING)
     add_subdirectory(test)
