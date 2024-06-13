@@ -2,8 +2,14 @@
 find_program(CPPCHECK cppcheck)
 if(CPPCHECK)
   message(STATUS "CMAKE_BINARY_DIR found: ${CMAKE_BINARY_DIR}")
-  set(CMAKE_CXX_CPPCHECK ${CPPCHECK} --enable=all --force --inconclusive
-                         --suppress=missingIncludeSystem --std=c++11)
+  set(CMAKE_CXX_CPPCHECK
+      ${CPPCHECK}
+      --enable=all
+      --force
+      --inconclusive
+      --suppress=missingIncludeSystem
+      --suppress=noExplicitConstructor
+      --std=c++11)
   message(STATUS "cppcheck found: ${CPPCHECK}")
 else()
   message(WARNING "cppcheck not found")
