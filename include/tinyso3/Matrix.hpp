@@ -18,7 +18,7 @@
 namespace tinyso3 {
 template<size_t M, size_t N, typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 class Matrix {
-private:
+protected:
     Type data[M][N]{};
 
 public:
@@ -127,9 +127,19 @@ public:
     void swapCols();
     void swapCols(size_t i, size_t j);
 
+    /**
+     * ElementWise operations
+     */
+    template<typename UnaryOp>
+    Matrix<M, N, Type> elementWise(UnaryOp) const;
+    template<typename BinaryOp>
+    Matrix<M, N, Type> elementWise(const Matrix<M, N, Type>&, BinaryOp) const;
+
 private:
     template<size_t _M, size_t _N, typename _Type>
     friend class Matrix;
+    template<size_t _M, typename _Type>
+    friend class Vector;
 
     template<size_t D, typename U, typename... Args>
     inline void initializer(const U& value, const Args&... args);
@@ -583,6 +593,26 @@ void Matrix<M, N, Type>::swapCols(size_t i, size_t j) {
         data[k][i] = data[k][j];
         data[k][j] = temp;
     }
+}
+
+template<size_t M, size_t N, typename Type>
+template<typename UnaryOp>
+Matrix<M, N, Type> Matrix<M, N, Type>::elementWise(UnaryOp op) const {
+    Matrix<M, N, Type> result;
+    for(size_t i = 0; i < M; i++)
+        for(size_t j = 0; j < N; j++)
+            result.data[i][j] = op(data[i][j]);
+    return result;
+}
+
+template<size_t M, size_t N, typename Type>
+template<typename BinaryOp>
+Matrix<M, N, Type> Matrix<M, N, Type>::elementWise(const Matrix<M, N, Type>& other, BinaryOp op) const {
+    Matrix<M, N, Type> result;
+    for(size_t i = 0; i < M; i++)
+        for(size_t j = 0; j < N; j++)
+            result.data[i][j] = op(data[i][j], other.data[i][j]);
+    return result;
 }
 
 template<size_t M, size_t N, typename Type>

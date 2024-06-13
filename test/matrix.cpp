@@ -288,4 +288,30 @@ TEST_CASE("Matrix") {
             REQUIRE(m7(i, 2) == m9(i, 1));
         }
     }
+
+    SECTION("Elementwise Operations") {
+        auto square = [](int x) {
+            return x * x;
+        };
+        Matrix<3, 4, int> m1{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+        Matrix<3, 4, int> m2 = m1.elementWise(square);
+
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 4; j++) {
+                REQUIRE(m2(i, j) == square(m1(i, j)));
+            }
+        }
+
+        auto add = [](int x, int y) {
+            return x + y;
+        };
+        Matrix<3, 4, int> m3{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+        Matrix<3, 4, int> m4 = m3.elementWise(m1, add);
+
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 4; j++) {
+                REQUIRE(m4(i, j) == add(m3(i, j), m1(i, j)));
+            }
+        }
+    }
 }
