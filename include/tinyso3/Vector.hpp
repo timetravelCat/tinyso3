@@ -13,7 +13,7 @@
 namespace tinyso3 {
 template<size_t M, typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 class Vector : public Matrix<M, 1, Type> {
-private:
+protected:
     using Matrix<M, 1, Type>::data;
 
 public:

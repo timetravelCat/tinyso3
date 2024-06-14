@@ -140,6 +140,10 @@ private:
     friend class Matrix;
     template<size_t _M, typename _Type>
     friend class Vector;
+    template<size_t _M, typename _Type>
+    friend class SquareMatrix;
+    template<typename _Type>
+    friend class Vector3;
 
     template<size_t D, typename U, typename... Args>
     inline void initializer(const U& value, const Args&... args);
