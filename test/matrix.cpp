@@ -170,6 +170,26 @@ TEST_CASE("Matrix") {
                 REQUIRE(m1(i, j) == m5(i, j));
             }
         }
+
+        Matrix<3, 4, int> m6 = 1 + m1;
+        Matrix<3, 4, int> m7 = 1 - m1;
+        Matrix<3, 4, int> m8 = 2 * m1;
+
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 4; j++) {
+                REQUIRE(m6(i, j) == 1 + m1(i, j));
+                REQUIRE(m7(i, j) == 1 - m1(i, j));
+                REQUIRE(m8(i, j) == 2 * m1(i, j));
+            }
+        }
+
+        Matrix<3, 4, int> m9 = -m1;
+
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 4; j++) {
+                REQUIRE(m9(i, j) == -m1(i, j));
+            }
+        }
     }
 
     SECTION("Arithmetic operators by matrix") {
