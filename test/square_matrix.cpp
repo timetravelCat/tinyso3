@@ -57,4 +57,16 @@ TEST_CASE("SquareMatrix") {
 
         // TODO test inverse of 4x4 matrix or larger
     }
+
+    SECTION("Vee") {
+        //  0 -3  2
+        //  3  0 -1
+        // -2  1  0
+        SquareMatrix<3, float> m1{0.0f, -3.0f, 2.0f, 3.0f, 0.0f, -1.0f, -2.0f, 1.0f, 0.0f};
+        Vector<3, float> v = m1.vee();
+
+        REQUIRE(v(0) == 1.0f);
+        REQUIRE(v(1) == 2.0f);
+        REQUIRE(v(2) == 3.0f);
+    }
 }

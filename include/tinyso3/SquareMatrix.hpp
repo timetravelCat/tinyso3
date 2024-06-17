@@ -8,7 +8,8 @@
 
 #pragma once
 
-#include "Vector.hpp"
+#include "tiny_type_traits.hpp"
+#include "Vector3.hpp"
 
 namespace tinyso3 {
 template<size_t M, typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
@@ -48,6 +49,14 @@ public:
     inline Type Det() const;
     SquareMatrix<M, Type> inverse() const;
     inline SquareMatrix<M, Type> Inv() const;
+
+    /**
+     * vee operation, enabled only for 3x3 matrix.
+     */
+    template<typename _Type = Type, typename R = enable_if_t<M == 3, Vector3<_Type>>>
+    inline R vee() const {
+        return R{-data[1][2], data[0][2], -data[0][1]};
+    }
 };
 
 template<size_t M, typename Type>
