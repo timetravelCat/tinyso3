@@ -23,16 +23,27 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
 
 # Library setup
-file(GLOB_RECURSE SOURCES include/tinyso3/*.cpp)
-add_library(${PROJECT_NAME} ${SOURCES})
+add_library(${PROJECT_NAME} INTERFACE)
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 add_compile_warnings(${PROJECT_NAME})
 target_include_directories(
-  ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-                         $<INSTALL_INTERFACE:include>)
+  ${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+                            $<INSTALL_INTERFACE:include>)
 
 # Testing setup
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  # check c++ standard libary is included. if included,
+  file(WRITE ${CMAKE_SOURCE_DIR}/dummy.cpp "")
+  file(GLOB_RECURSE HEADERS include/tinyso3/*.hpp)
+  foreach(HEADER ${HEADERS})
+    file(RELATIVE_PATH HEADER_RELATIVE ${CMAKE_SOURCE_DIR}/include ${HEADER})
+    file(APPEND ${CMAKE_SOURCE_DIR}/dummy.cpp "#include <${HEADER_RELATIVE}>\n")
+  endforeach()
+
+  add_library(dummy ${CMAKE_SOURCE_DIR}/dummy.cpp)
+  target_link_libraries(dummy ${PROJECT_NAME})
+  add_stdlibcpp_exceptions(dummy)
+
   option(BUILD_TESTING "" OFF) # Set to OFF by default
   include(CTest)
   if(BUILD_TESTING)

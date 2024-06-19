@@ -22,8 +22,8 @@ TEST_CASE("RotationMatrix") {
         const RotationMatrix<float> y_passive_transpose = y_passive.T();
         const RotationMatrix<float> z_passive_transpose = z_passive.T();
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 3; j++) {
                 REQUIRE_THAT(x_active(i, j), Catch::Matchers::WithinRel(x_passive_transpose(i, j), 1e-6f));
             }
         }

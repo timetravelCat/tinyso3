@@ -564,7 +564,7 @@ Matrix<M, N, Type> Matrix<M, N, Type>::abs() const {
     Matrix<M, N, Type> result;
     for(size_t i = 0; i < M; i++)
         for(size_t j = 0; j < N; j++)
-            result.data[i][j] = ::abs(data[i][j]);
+            result.data[i][j] = ::fabs(data[i][j]);
     return result;
 }
 

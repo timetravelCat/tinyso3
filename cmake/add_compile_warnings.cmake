@@ -2,7 +2,6 @@ function(add_compile_warnings)
   foreach(target ${ARGN})
     if(MSVC)
       set(COMPILE_OPTIONS
-          /X # Ignore standard include paths
           /W4 # Baseline reasonable warnings
           /w14242 # 'identifier': conversion from 'type1' to 'type1', possible
                   # loss of data
@@ -41,7 +40,6 @@ function(add_compile_warnings)
       )
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
       set(COMPILE_OPTIONS
-          -nostdinc++ # Ignore standard include paths
           -Wall
           -Wextra # reasonable and standard
           -Wshadow # warn the user if a variable declaration shadows one from a
@@ -74,7 +72,6 @@ function(add_compile_warnings)
       )
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
       set(COMPILE_OPTIONS
-          -nostdinc++ # Ignore standard include paths
           -Wall
           -Wextra # reasonable and standard
           -Wshadow # warn the user if a variable declaration shadows one from a
@@ -95,6 +92,22 @@ function(add_compile_warnings)
           -Wformat=2 # warn on security issues around functions that format
                      # output (ie printf)
       )
+    else()
+      message(WARNING "Unknown compiler: ${CMAKE_CXX_COMPILER_ID}")
+    endif()
+
+    target_compile_options(${target} INTERFACE ${COMPILE_OPTIONS})
+  endforeach()
+endfunction()
+
+function(add_stdlibcpp_exceptions)
+  foreach(target ${ARGN})
+    if(MSVC)
+      set(COMPILE_OPTIONS /X) # Ignore standard include paths
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+      set(COMPILE_OPTIONS -nostdinc++) # Ignore standard include paths
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+      set(COMPILE_OPTIONS -nostdinc++) # Ignore standard include paths
     else()
       message(WARNING "Unknown compiler: ${CMAKE_CXX_COMPILER_ID}")
     endif()

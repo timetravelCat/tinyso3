@@ -36,7 +36,7 @@ config DEFAULT_FLOATING_POINT_PRECISION_64_EPSILON
 
 config DEFAULT_FLOATING_POINT_PRECISION_128_EPSILON
      int "Floating Point Epsilon Exponent (Long Double Precision)"
-     default 10
+     default 16
      help
           The default floating point precision epsilon for long double(128).
           The epsilon would be 1e-{n}.

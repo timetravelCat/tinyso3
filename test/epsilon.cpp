@@ -20,7 +20,7 @@ TEST_CASE("Epsilon") {
         }
 
         if(i == CONFIG_DEFAULT_FLOATING_POINT_PRECISION_128_EPSILON) {
-            REQUIRE_THAT(ldbl_eps, Catch::Matchers::WithinRel(::pow(static_cast<long double>(10), static_cast<long double>(-i)), 1e-12));
+            REQUIRE_THAT(ldbl_eps, Catch::Matchers::WithinRel(::pow(static_cast<double>(10), static_cast<double>(-i)), 1e-12));
         }
     }
 };

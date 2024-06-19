@@ -32,16 +32,24 @@
 #define TINYSO3_DBL_EPSILON TINYSO3_EPS_EXPONENT_VALUE(CONFIG_DEFAULT_FLOATING_POINT_PRECISION_64_EPSILON)
 #define TINYSO3_LDBL_EPSILON TINYSO3_EPS_EXPONENT_VALUE(CONFIG_DEFAULT_FLOATING_POINT_PRECISION_128_EPSILON)
 namespace tinyso3 {
-template<typename T, enable_if_t<is_floating_point<T>::value>* = nullptr>
+template<typename T>
 constexpr T epsilon() {
-    if(is_same<T, float>::value) {
-        return TINYSO3_FLT_EPSILON;
-    } else if(is_same<T, double>::value) {
-        return TINYSO3_DBL_EPSILON;
-    } else if(is_same<T, long double>::value) {
-        return TINYSO3_LDBL_EPSILON;
-    }
-
+    static_assert(true, "T must be a floating point type");
     return static_cast<T>(0); // Can not reach here, but to avoid compiler warning
+}
+
+template<>
+constexpr float epsilon<>() {
+    return static_cast<float>(TINYSO3_FLT_EPSILON);
+}
+
+template<>
+constexpr double epsilon<>() {
+    return TINYSO3_DBL_EPSILON;
+}
+
+template<>
+constexpr long double epsilon<>() {
+    return static_cast<long double>(TINYSO3_LDBL_EPSILON);
 }
 }; // namespace tinyso3

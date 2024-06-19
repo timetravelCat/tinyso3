@@ -41,3 +41,6 @@ site
 ### Kconfig ###
 *.config
 *.config.old
+
+### dummy file ###
+dummy.cpp

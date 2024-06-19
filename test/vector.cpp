@@ -10,13 +10,13 @@ TEST_CASE("Vector") {
         Vector<5, float> v1{1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
         Vector<5, float> v2(data);
 
-        for(int i = 0; i < 5; i++) {
+        for(size_t i = 0; i < 5; i++) {
             REQUIRE(v1(i, 0) == v2(i, 0));
         }
 
         Matrix<5, 1, float> v3{-1.0f, -2.0f, -3.0f, -4.0f, -5.0f};
         v2 = v3;
-        for(int i = 0; i < 5; i++) {
+        for(size_t i = 0; i < 5; i++) {
             REQUIRE(v2(i, 0) == v3(i, 0));
         }
     }
@@ -25,7 +25,7 @@ TEST_CASE("Vector") {
         const float data[5] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f};
         Vector<5, float> v{data};
 
-        for(int i = 0; i < 5; i++) {
+        for(size_t i = 0; i < 5; i++) {
             REQUIRE(data[i] == v(i));
             v(i) = data[i];
             REQUIRE(data[i] == v(i));
@@ -55,7 +55,7 @@ TEST_CASE("Vector") {
 
         v.normalize();
 
-        for(int i = 0; i < 3; i++) {
+        for(size_t i = 0; i < 3; i++) {
             REQUIRE(v(i) == v2(i));
         }
     }

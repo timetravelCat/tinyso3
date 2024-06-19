@@ -15,8 +15,8 @@ TEST_CASE("Matrix") {
         Matrix<3, 4, float> m5{1};
         Matrix<3, 4, float> m6{1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f};
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m1(i, j) == 0.0f);
                 REQUIRE(m2(i, j) == data_1d[i * 4 + j]);
                 REQUIRE(m3(i, j) == data_2d[i][j]);
@@ -35,8 +35,8 @@ TEST_CASE("Matrix") {
         m1 = m2;
         m3 = 1.0f;
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m1(i, j) == 1.0f);
                 REQUIRE(m3(i, j) == 1.0f);
             }
@@ -49,15 +49,15 @@ TEST_CASE("Matrix") {
         Matrix<4, 5, float> m6;
 
         m6.setBlock<1, 2>(m4);
-        for(int i = 0; i < 2; i++) {
-            for(int j = 0; j < 3; j++) {
+        for(size_t i = 0; i < 2; i++) {
+            for(size_t j = 0; j < 3; j++) {
                 REQUIRE(m6(i + 1, j + 2) == data_1[i][j]);
             }
         }
 
         m6.setBlock(1, 2, m5);
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 2; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 2; j++) {
                 REQUIRE(m6(i + 1, j + 2) == data_2[i][j]);
             }
         }
@@ -67,14 +67,14 @@ TEST_CASE("Matrix") {
 
         m6.setCol(1, col);
         m6.setCol<2>(col);
-        for(int i = 0; i < 4; i++) {
+        for(size_t i = 0; i < 4; i++) {
             REQUIRE(m6(i, 1) == col(i, 0));
             REQUIRE(m6(i, 2) == col(i, 0));
         }
 
         m6.setRow(1, row);
         m6.setRow<2>(row);
-        for(int i = 0; i < 5; i++) {
+        for(size_t i = 0; i < 5; i++) {
             REQUIRE(m6(1, i) == row(0, i));
             REQUIRE(m6(2, i) == row(0, i));
         }
@@ -85,8 +85,8 @@ TEST_CASE("Matrix") {
         Matrix<3, 4, float> identity = Matrix<3, 4, float>::I();
         Matrix<3, 4, float> nans = Matrix<3, 4, float>::NaN();
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(zero(i, j) == 0.0f);
                 REQUIRE(identity(i, j) == (i == j ? 1.0f : 0.0f));
                 REQUIRE(::isnan(nans(i, j)));
@@ -99,10 +99,10 @@ TEST_CASE("Matrix") {
         Matrix<3, 4, int> m1 = m.cast<int>();
         Matrix<3, 4, double> m2 = static_cast<Matrix<3, 4, double>>(m);
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m1(i, j) == static_cast<int>(m(i, j)));
-                REQUIRE(m2(i, j) == static_cast<float>(m(i, j)));
+                REQUIRE(m2(i, j) == static_cast<double>(m(i, j)));
             }
         }
     }
@@ -111,8 +111,8 @@ TEST_CASE("Matrix") {
         float data[3][4] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f};
         Matrix<3, 4, float> m{data};
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m(i, j) == data[i][j]);
                 m(i, j) = data[i][j] + 1.0f;
                 REQUIRE(m(i, j) == data[i][j] + 1.0f);
@@ -120,21 +120,21 @@ TEST_CASE("Matrix") {
             }
         }
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m.row(i)(0, j) == data[i][j]);
                 REQUIRE(m.col(j)(i, 0) == data[i][j]);
             }
         }
 
-        for(int i = 0; i < 3; i++) {
+        for(size_t i = 0; i < 3; i++) {
             REQUIRE(m.col<0>()(i, 0) == data[i][0]);
             REQUIRE(m.col<1>()(i, 0) == data[i][1]);
             REQUIRE(m.col<2>()(i, 0) == data[i][2]);
             REQUIRE(m.col<3>()(i, 0) == data[i][3]);
         }
 
-        for(int j = 0; j < 4; j++) {
+        for(size_t j = 0; j < 4; j++) {
             REQUIRE(m.row<0>()(0, j) == data[0][j]);
             REQUIRE(m.row<1>()(0, j) == data[1][j]);
             REQUIRE(m.row<2>()(0, j) == data[2][j]);
@@ -148,8 +148,8 @@ TEST_CASE("Matrix") {
         Matrix<3, 4, int> m4 = m1 * 2;
         Matrix<3, 4, int> m5 = m1 / 2;
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m2(i, j) == m1(i, j) + 1);
                 REQUIRE(m3(i, j) == m1(i, j) - 1);
                 REQUIRE(m4(i, j) == m1(i, j) * 2);
@@ -162,8 +162,8 @@ TEST_CASE("Matrix") {
         m4 /= 2;
         m5 *= 2;
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m1(i, j) == m2(i, j));
                 REQUIRE(m1(i, j) == m3(i, j));
                 REQUIRE(m1(i, j) == m4(i, j));
@@ -175,8 +175,8 @@ TEST_CASE("Matrix") {
         Matrix<3, 4, int> m7 = 1 - m1;
         Matrix<3, 4, int> m8 = 2 * m1;
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m6(i, j) == 1 + m1(i, j));
                 REQUIRE(m7(i, j) == 1 - m1(i, j));
                 REQUIRE(m8(i, j) == 2 * m1(i, j));
@@ -185,8 +185,8 @@ TEST_CASE("Matrix") {
 
         Matrix<3, 4, int> m9 = -m1;
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m9(i, j) == -m1(i, j));
             }
         }
@@ -198,8 +198,8 @@ TEST_CASE("Matrix") {
         Matrix<3, 4, int> m3 = m1 + m2;
         Matrix<3, 4, int> m4 = m1 - m2;
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m3(i, j) == m1(i, j) + m2(i, j));
                 REQUIRE(m4(i, j) == m1(i, j) - m2(i, j));
             }
@@ -208,8 +208,8 @@ TEST_CASE("Matrix") {
         m3 -= m2;
         m4 += m2;
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m1(i, j) == m3(i, j));
                 REQUIRE(m1(i, j) == m4(i, j));
             }
@@ -218,10 +218,10 @@ TEST_CASE("Matrix") {
         Matrix<4, 3, int> m5{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
         Matrix<3, 3, int> m6 = m1 * m5;
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 3; j++) {
                 int sum = 0;
-                for(int k = 0; k < 4; k++) {
+                for(size_t k = 0; k < 4; k++) {
                     sum += m1(i, k) * m5(k, j);
                 }
                 REQUIRE(m6(i, j) == sum);
@@ -233,8 +233,8 @@ TEST_CASE("Matrix") {
         Matrix<3, 4, int> m1{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
         Matrix<4, 3, int> m2 = m1.transpose();
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m1(i, j) == m2(j, i));
             }
         }
@@ -244,15 +244,15 @@ TEST_CASE("Matrix") {
         Matrix<3, 4, int> m1{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
         Matrix<2, 3, int> m2 = m1.slice<1, 1, 2, 3>();
-        for(int i = 0; i < 2; i++) {
-            for(int j = 0; j < 3; j++) {
+        for(size_t i = 0; i < 2; i++) {
+            for(size_t j = 0; j < 3; j++) {
                 REQUIRE(m2(i, j) == m1(i + 1, j + 1));
             }
         }
 
         Matrix<2, 3, int> m3 = m1.slice<2, 3>(1, 1);
-        for(int i = 0; i < 2; i++) {
-            for(int j = 0; j < 3; j++) {
+        for(size_t i = 0; i < 2; i++) {
+            for(size_t j = 0; j < 3; j++) {
                 REQUIRE(m3(i, j) == m1(i + 1, j + 1));
             }
         }
@@ -277,8 +277,8 @@ TEST_CASE("Matrix") {
 
         Matrix<3, 4, float> m5{1.0f, -2.0f, 3.0f, -4.0f, -5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f};
         Matrix<3, 4, float> m6 = m5.abs();
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m6(i, j) == ::fabs(m5(i, j)));
             }
         }
@@ -289,7 +289,7 @@ TEST_CASE("Matrix") {
         m8.swapRows(1, 2);
         m9.swapRows<1, 2>();
 
-        for(int i = 0; i < 4; i++) {
+        for(size_t i = 0; i < 4; i++) {
             REQUIRE(m7(1, i) == m8(2, i));
             REQUIRE(m7(2, i) == m8(1, i));
             REQUIRE(m7(1, i) == m9(2, i));
@@ -301,7 +301,7 @@ TEST_CASE("Matrix") {
         m8.swapCols(1, 2);
         m9.swapCols<1, 2>();
 
-        for(int i = 0; i < 3; i++) {
+        for(size_t i = 0; i < 3; i++) {
             REQUIRE(m7(i, 1) == m8(i, 2));
             REQUIRE(m7(i, 2) == m8(i, 1));
             REQUIRE(m7(i, 1) == m9(i, 2));
@@ -316,8 +316,8 @@ TEST_CASE("Matrix") {
         Matrix<3, 4, int> m1{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
         Matrix<3, 4, int> m2 = m1.elementWise(square);
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m2(i, j) == square(m1(i, j)));
             }
         }
@@ -328,8 +328,8 @@ TEST_CASE("Matrix") {
         Matrix<3, 4, int> m3{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
         Matrix<3, 4, int> m4 = m3.elementWise(m1, add);
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 4; j++) {
                 REQUIRE(m4(i, j) == add(m3(i, j), m1(i, j)));
             }
         }

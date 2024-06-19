@@ -12,7 +12,7 @@ TEST_CASE("Vector") {
         Vector3<float> v2{v0};
         Vector3<float> v3{v1};
 
-        for(int i = 0; i < 3; i++) {
+        for(size_t i = 0; i < 3; i++) {
             REQUIRE(v0(i, 0) == v1(i));
             REQUIRE(v0(i, 0) == v2(i));
             REQUIRE(v0(i, 0) == v3(i));

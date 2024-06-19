@@ -9,8 +9,8 @@ TEST_CASE("SquareMatrix") {
         Matrix<3, 3, float> m1{1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f};
         SquareMatrix<3, float> m2(m1);
 
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 3; j++) {
                 REQUIRE(m1(i, j) == m2(i, j));
             }
         }
@@ -49,8 +49,8 @@ TEST_CASE("SquareMatrix") {
         SquareMatrix<3, float> m3_inv_compare{-0.3333333f, -1.6666666f, 1.0f, -1.0f, 4.0f, -2.0f, 1.0f, -2.0f, 1.0f};
 
         REQUIRE_THAT(m3.determinant(), Catch::Matchers::WithinRel(-3.0f, 1e-6f));
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++) {
+        for(size_t i = 0; i < 3; i++) {
+            for(size_t j = 0; j < 3; j++) {
                 REQUIRE_THAT(m3_inv(i, j), Catch::Matchers::WithinRel(m3_inv(i, j), 1e-6f));
             }
         }
