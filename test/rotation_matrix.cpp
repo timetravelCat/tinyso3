@@ -25,6 +25,8 @@ TEST_CASE("RotationMatrix") {
         for(size_t i = 0; i < 3; i++) {
             for(size_t j = 0; j < 3; j++) {
                 REQUIRE_THAT(x_active(i, j), Catch::Matchers::WithinRel(x_passive_transpose(i, j), 1e-6f));
+                REQUIRE_THAT(y_active(i, j), Catch::Matchers::WithinRel(y_passive_transpose(i, j), 1e-6f));
+                REQUIRE_THAT(z_active(i, j), Catch::Matchers::WithinRel(z_passive_transpose(i, j), 1e-6f));
             }
         }
 
@@ -60,5 +62,33 @@ TEST_CASE("RotationMatrix") {
     }
 
     SECTION("Normalize") {
+        /**
+         * Assume we have a matrix, with row 
+         * {1.0f, 1.0f, 0.0f}
+         * {0.0f, 1.0f, 0.0f}
+         * {0.0f, 0.0f, 1.0f}
+         * 
+         * After normalization, the matrix should be orthonomal.
+         * 
+         * {0.894427 0.447214 0.000000}
+         * {-0.447213 0.894427 0.000000}
+         * {0.000000 0.000000 1.000000}
+         * 
+         * Which is the closest to the original matrix.
+         */
+        RotationMatrix<float> m{1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+        m.normalize();
+
+        Vector3<float> col0 = m.col<0>();
+        Vector3<float> col1 = m.col<1>();
+        Vector3<float> col2 = m.col<2>();
+
+        REQUIRE_THAT(col0.squaredNorm(), Catch::Matchers::WithinRel(1.0, 1e-4));
+        REQUIRE_THAT(col1.squaredNorm(), Catch::Matchers::WithinRel(1.0, 1e-4));
+        REQUIRE_THAT(col2.squaredNorm(), Catch::Matchers::WithinRel(1.0, 1e-4));
+        REQUIRE(::fabs(col0.dot(col1)) < 1e-4f);
+        REQUIRE(::fabs(col0.dot(col2)) < 1e-4f);
+        REQUIRE(::fabs(col1.dot(col2)) < 1e-4f);
+        REQUIRE_THAT(m.determinant(), Catch::Matchers::WithinRel(1.0, 1e-4));
     }
 }

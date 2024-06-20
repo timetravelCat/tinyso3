@@ -5,12 +5,11 @@
  * 
  * @author timetravelCat <timetraveler930@gmail.com>
  */
-
 #pragma once
 
+#include "version.hpp"
 #include "tiny_type_traits.hpp"
-#include "SquareMatrix.hpp"
-#include "Vector3.hpp"
+#include "EigenSolver.hpp"
 
 namespace tinyso3 {
 
@@ -25,13 +24,7 @@ using Y = integral_constant<PrincipalAxis, PrincipalAxis::Y>;
 using Z = integral_constant<PrincipalAxis, PrincipalAxis::Z>;
 
 template<typename T>
-struct is_integral_constant_of_principal_rotation_axis : false_type {};
-template<>
-struct is_integral_constant_of_principal_rotation_axis<X> : true_type {};
-template<>
-struct is_integral_constant_of_principal_rotation_axis<Y> : true_type {};
-template<>
-struct is_integral_constant_of_principal_rotation_axis<Z> : true_type {};
+struct is_integral_constant_of_principal_rotation_axis;
 
 enum class RotationMatrixTransformConvention {
     ACTIVE,
@@ -40,15 +33,9 @@ enum class RotationMatrixTransformConvention {
 
 using ACTIVE = integral_constant<RotationMatrixTransformConvention, RotationMatrixTransformConvention::ACTIVE>;
 using PASSIVE = integral_constant<RotationMatrixTransformConvention, RotationMatrixTransformConvention::PASSIVE>;
-using ALIBI = ACTIVE;
-using ALIAS = PASSIVE;
 
 template<typename T>
-struct is_integral_constant_of_rotation_matrix_transform_convention : false_type {};
-template<>
-struct is_integral_constant_of_rotation_matrix_transform_convention<ACTIVE> : true_type {};
-template<>
-struct is_integral_constant_of_rotation_matrix_transform_convention<PASSIVE> : true_type {};
+struct is_integral_constant_of_rotation_matrix_transform_convention;
 
 template<typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 class RotationMatrix : public SquareMatrix<3, Type> {
@@ -74,21 +61,25 @@ public:
     static RotationMatrix<Type> RotatePrincipalAxis(const Type& angle);
 
     /**
-     * (R*R^T)^(-1/2)*R
-     * State Estimation For Robotics 257page
-     * https://www.quora.com/How-can-you-find-the-square-root-of-3-3-matrix
-     * https://github.com/rounakdatta/mat-ops/blob/master/eigenvector.cpp
-     * https://stackoverflow.com/questions/13328676/c-solving-cubic-equations
-     * https://cplusplus.com/forum/beginner/234717/
+     * Normalizes the rotation matrix.
      * 
-     * 1/sqrt(r1) * e e^T + 1/sqrt(r2) * f f^T + 1/sqrt(r3) * g g^T
+     * Calculates (R*R^T)^(-1/2)*R
+     * R*R^T is a symmetric matrix.
+     * for symmetric matrix, A^(-1/2) is 1/sqrt(r1) * e e^T + 1/sqrt(r2) * f f^T + 1/sqrt(r3) * g g^T
+     * https://www.quora.com/How-can-you-find-the-square-root-of-3-3-matrix
+     * Fast analytic solution calculating eigen value and eigen vector implemented in EigenSolver.hpp
+     * https://www.geometrictools.com/Documentation/RobustEigenSymmetric3x3.pdf
+     * 
+     * As a result, return matrix satisfy orthonormality and finds the closest to the original matrix.
+     * See "State Estimation for Robotics - Timothy D. Barfoot - 2017 - p. 257"
      */
     void normalize();
 };
 
 template<typename Type>
 RotationMatrix<Type>::RotationMatrix(const SquareMatrix<3, Type>& other) :
-SquareMatrix<3, Type>(other) {}
+SquareMatrix<3, Type>(other) {
+}
 
 template<typename Type>
 template<typename Axis,
@@ -121,7 +112,45 @@ RotationMatrix<Type> RotationMatrix<Type>::RotatePrincipalAxis(const Type& angle
 
 template<typename Type>
 void RotationMatrix<Type>::normalize() {
-    // WIP
+    // Get eigenvalues & eigenvectors of R*R^T
+    const SquareMatrix<3, Type> RRt = (*this) * (this->T());
+    const array<EigenPair<Type>, 3> eigenpairs = EigenSolver<Type>{}(RRt);
+
+    (*this) = (Type(1) / ::sqrt(::fabs(eigenpairs[0].first)) * (eigenpairs[0].second * eigenpairs[0].second.transpose()) +
+               Type(1) / ::sqrt(::fabs(eigenpairs[1].first)) * (eigenpairs[1].second * eigenpairs[1].second.transpose()) +
+               Type(1) / ::sqrt(::fabs(eigenpairs[2].first)) * (eigenpairs[2].second * eigenpairs[2].second.transpose())) *
+              (*this);
 }
+
+template<typename T>
+struct is_integral_constant_of_principal_rotation_axis : false_type {
+};
+template<>
+struct is_integral_constant_of_principal_rotation_axis<X> : true_type {
+};
+template<>
+struct is_integral_constant_of_principal_rotation_axis<Y> : true_type {
+};
+template<>
+struct is_integral_constant_of_principal_rotation_axis<Z> : true_type {
+};
+
+template<typename T>
+struct is_integral_constant_of_rotation_matrix_transform_convention : false_type {
+};
+template<>
+struct is_integral_constant_of_rotation_matrix_transform_convention<ACTIVE> : true_type {
+};
+template<>
+struct is_integral_constant_of_rotation_matrix_transform_convention<PASSIVE> : true_type {
+};
+
+using ALIBI = ACTIVE;
+using ALIAS = PASSIVE;
+
+template<typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
+using DirectionCosineMatrix = RotationMatrix<Type>;
+template<typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
+using DCM = DirectionCosineMatrix<Type>;
 
 }; // namespace tinyso3
