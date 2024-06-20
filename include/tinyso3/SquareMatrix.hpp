@@ -57,6 +57,10 @@ public:
     inline R vee() const {
         return R{-data[1][2], data[0][2], -data[0][1]};
     }
+
+private:
+    template<typename _Type>
+    friend class RotationMatrix;
 };
 
 template<size_t M, typename Type>
