@@ -81,8 +81,8 @@ TEST_CASE("Matrix") {
     }
 
     SECTION("Constants(Static Methods)") {
-        Matrix<3, 4, float> zero = Matrix<3, 4, float>::O();
-        Matrix<3, 4, float> identity = Matrix<3, 4, float>::I();
+        Matrix<3, 4, float> zero = Matrix<3, 4, float>::Null();
+        Matrix<3, 4, float> identity = Matrix<3, 4, float>::Identity();
         Matrix<3, 4, float> nans = Matrix<3, 4, float>::NaN();
 
         for(size_t i = 0; i < 3; i++) {
@@ -108,7 +108,7 @@ TEST_CASE("Matrix") {
     }
 
     SECTION("Accessors") {
-        float data[3][4] = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f};
+        float data[3][4] = {{1.0f, 2.0f, 3.0f, 4.0f}, {5.0f, 6.0f, 7.0f, 8.0f}, {9.0f, 10.0f, 11.0f, 12.0f}};
         Matrix<3, 4, float> m{data};
 
         for(size_t i = 0; i < 3; i++) {

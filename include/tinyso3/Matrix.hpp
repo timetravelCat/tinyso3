@@ -52,9 +52,9 @@ public:
     /**
      * Constants(Static Methods)
      */
-    static Matrix O();   // Zero matrix
-    static Matrix I();   // Identity matrix
-    static Matrix NaN(); // Not a number matrix
+    static Matrix Null();     // Zero matrix
+    static Matrix Identity(); // Identity matrix
+    static Matrix NaN();      // Not a number matrix
 
     /**
      * Cast to other type
@@ -284,7 +284,7 @@ Matrix<M, N, Type>& Matrix<M, N, Type>::setRow(size_t i, const Matrix<1, N, Type
 }
 
 template<size_t M, size_t N, typename Type>
-Matrix<M, N, Type> Matrix<M, N, Type>::O() {
+Matrix<M, N, Type> Matrix<M, N, Type>::Null() {
     return Matrix(Type(0));
 }
 
@@ -294,7 +294,7 @@ Matrix<M, N, Type> Matrix<M, N, Type>::NaN() {
 }
 
 template<size_t M, size_t N, typename Type>
-Matrix<M, N, Type> Matrix<M, N, Type>::I() {
+Matrix<M, N, Type> Matrix<M, N, Type>::Identity() {
     constexpr size_t MIN = (M < N) ? M : N;
     Matrix result{Type(0)};
     for(size_t i = 0; i < MIN; i++)

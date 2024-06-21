@@ -46,9 +46,7 @@ public:
      * Determinant and Inverse
      */
     Type determinant() const;
-    inline Type Det() const;
     SquareMatrix<M, Type> inverse() const;
-    inline SquareMatrix<M, Type> Inv() const;
 
     /**
      * vee operation, enabled only for 3x3 matrix.
@@ -114,11 +112,6 @@ Type SquareMatrix<M, Type>::determinant() const {
 }
 
 template<size_t M, typename Type>
-Type SquareMatrix<M, Type>::Det() const {
-    return determinant();
-}
-
-template<size_t M, typename Type>
 SquareMatrix<M, Type> SquareMatrix<M, Type>::inverse() const {
     SquareMatrix<M, Type> result;
     const Type det = determinant();
@@ -148,11 +141,6 @@ SquareMatrix<M, Type> SquareMatrix<M, Type>::inverse() const {
     }
 
     return result / det;
-}
-
-template<size_t M, typename Type>
-SquareMatrix<M, Type> SquareMatrix<M, Type>::Inv() const {
-    return inverse();
 }
 
 } // namespace tinyso3
