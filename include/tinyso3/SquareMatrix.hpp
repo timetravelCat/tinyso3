@@ -26,6 +26,30 @@ public:
     SquareMatrix(const Matrix<M, M, Type>& other);
 
     /**
+     * SquareMatrix Group Operations
+     */
+    using Matrix<M, M, Type>::operator+;
+    inline SquareMatrix operator+(Type scalar) const { return Matrix<M, M, Type>::operator+(scalar); };
+    using Matrix<M, M, Type>::operator-;
+    inline SquareMatrix operator-(Type scalar) const { return Matrix<M, M, Type>::operator-(scalar); };
+    using Matrix<M, M, Type>::operator*;
+    inline SquareMatrix operator*(Type scalar) const { return Matrix<M, M, Type>::operator*(scalar); };
+    using Matrix<M, M, Type>::operator/;
+    inline SquareMatrix operator/(Type scalar) const { return Matrix<M, M, Type>::operator/(scalar); };
+    inline SquareMatrix operator-() const { return Matrix<M, M, Type>::operator-(); };
+
+    inline friend SquareMatrix operator+(Type lhs, const SquareMatrix& rhs) { return rhs + lhs; }
+    inline friend SquareMatrix operator-(Type lhs, const SquareMatrix& rhs) { return -rhs + lhs; };
+    inline friend SquareMatrix operator*(Type lhs, const SquareMatrix& rhs) { return rhs * lhs; };
+    inline SquareMatrix operator+(const SquareMatrix& other) const { return Matrix<M, M, Type>::operator+(other); };
+    inline SquareMatrix operator-(const SquareMatrix& other) const { return Matrix<M, M, Type>::operator-(other); };
+    inline SquareMatrix operator*(const SquareMatrix& other) const { return Matrix<M, M, Type>::operator*(other); };
+
+    static inline SquareMatrix Null() { return Matrix<M, M, Type>::Null(); }
+    static inline SquareMatrix Identity() { return Matrix<M, M, Type>::Identity(); }
+    static inline SquareMatrix NaN() { return Matrix<M, M, Type>::NaN(); }
+
+    /**
      * Accessors
      */
     using Matrix<M, M, Type>::operator();

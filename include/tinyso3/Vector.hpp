@@ -26,6 +26,26 @@ public:
     Vector(const Matrix<M, 1, Type>& v);
 
     /**
+     * Vector Group Operations
+     */
+    using Matrix<M, 1, Type>::operator+;
+    inline Vector operator+(Type scalar) const { return Matrix<M, 1, Type>::operator+(scalar); };
+    using Matrix<M, 1, Type>::operator-;
+    inline Vector operator-(Type scalar) const { return Matrix<M, 1, Type>::operator-(scalar); };
+    using Matrix<M, 1, Type>::operator*;
+    inline Vector operator*(Type scalar) const { return Matrix<M, 1, Type>::operator*(scalar); };
+    using Matrix<M, 1, Type>::operator/;
+    inline Vector operator/(Type scalar) const { return Matrix<M, 1, Type>::operator/(scalar); };
+    inline Vector operator-() const { return Matrix<M, 1, Type>::operator-(); };
+
+    inline friend Vector operator+(Type lhs, const Vector& rhs) { return rhs + lhs; }
+    inline friend Vector operator-(Type lhs, const Vector& rhs) { return -rhs + lhs; };
+    inline friend Vector operator*(Type lhs, const Vector& rhs) { return rhs * lhs; };
+    inline Vector operator+(const Vector& other) const { return Matrix<M, 1, Type>::operator+(other); };
+    inline Vector operator-(const Vector& other) const { return Matrix<M, 1, Type>::operator-(other); };
+    inline Vector operator*(const Vector& other) const { return Matrix<M, 1, Type>::operator*(other); };
+
+    /**
      * Accessors
      */
     using Matrix<M, 1, Type>::operator();

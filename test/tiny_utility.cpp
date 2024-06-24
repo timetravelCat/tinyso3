@@ -55,4 +55,13 @@ TEST_CASE("Utility") {
         REQUIRE(a3.data[1] == 0);
         REQUIRE(a3.data[2] == 0);
     }
+
+    SECTION("constrain") {
+        REQUIRE(constrain(1, 0, 2) == 1);
+        REQUIRE(constrain(-1, 0, 2) == 0);
+        REQUIRE(constrain(3, 0, 2) == 2);
+        REQUIRE(constrain(1.f, 0.f, 2.f) == 1.f);
+        REQUIRE(constrain(-1.f, 0.f, 2.f) == 0.f);
+        REQUIRE(constrain(3.f, 0.f, 2.f) == 2.f);
+    }
 }

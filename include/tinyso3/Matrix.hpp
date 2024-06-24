@@ -88,12 +88,10 @@ public:
     inline Matrix operator/(Type scalar) const;
     inline void operator/=(Type scalar);
     Matrix operator-() const;
-    template<size_t _M, size_t _N, typename _Type>
-    inline friend Matrix<_M, _N, _Type> operator+(_Type lhs, const Matrix<_M, _N, _Type>& rhs);
-    template<size_t _M, size_t _N, typename _Type>
-    friend Matrix<_M, _N, _Type> operator-(_Type lhs, const Matrix<_M, _N, _Type>& rhs);
-    template<size_t _M, size_t _N, typename _Type>
-    inline friend Matrix<_M, _N, _Type> operator*(_Type lhs, const Matrix<_M, _N, _Type>& rhs);
+
+    inline friend Matrix operator+(Type lhs, const Matrix& rhs) { return rhs + lhs; }
+    inline friend Matrix operator-(Type lhs, const Matrix& rhs) { return -rhs + lhs; }
+    inline friend Matrix operator*(Type lhs, const Matrix& rhs) { return rhs * lhs; }
 
     /**
      * Arithmetic operators by matrix
@@ -147,10 +145,6 @@ private:
     friend class Matrix;
     template<size_t _M, typename _Type>
     friend class Vector;
-    template<size_t _M, typename _Type>
-    friend class SquareMatrix;
-    template<typename _Type>
-    friend class Vector3;
 
     template<size_t D, typename U, typename... Args>
     inline void initializer(const U& value, const Args&... args);
@@ -416,25 +410,6 @@ void Matrix<M, N, Type>::operator/=(Type scalar) {
 template<size_t M, size_t N, typename Type>
 Matrix<M, N, Type> Matrix<M, N, Type>::operator-() const {
     return (*this) * Type(-1);
-}
-
-template<size_t _M, size_t _N, typename _Type>
-inline Matrix<_M, _N, _Type> operator+(_Type lhs, const Matrix<_M, _N, _Type>& rhs) {
-    return rhs + lhs;
-}
-
-template<size_t _M, size_t _N, typename _Type>
-Matrix<_M, _N, _Type> operator-(_Type lhs, const Matrix<_M, _N, _Type>& rhs) {
-    Matrix<_M, _N, _Type> result;
-    for(size_t i = 0; i < _M; i++)
-        for(size_t j = 0; j < _N; j++)
-            result.data[i][j] = lhs - rhs.data[i][j];
-    return result;
-}
-
-template<size_t _M, size_t _N, typename _Type>
-inline Matrix<_M, _N, _Type> operator*(_Type lhs, const Matrix<_M, _N, _Type>& rhs) {
-    return rhs * lhs;
 }
 
 template<size_t M, size_t N, typename Type>

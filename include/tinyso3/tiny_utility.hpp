@@ -75,4 +75,11 @@ struct array {
         return N;
     };
 };
+
+template<typename T>
+inline T constrain(const T& value, const T& min, const T& max) {
+    return (value < min) ? min :
+           (value > max) ? max :
+                           value;
+};
 }; // namespace tinyso3

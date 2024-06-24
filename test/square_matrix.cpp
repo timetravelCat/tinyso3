@@ -16,6 +16,26 @@ TEST_CASE("SquareMatrix") {
         }
     }
 
+    SECTION("Group Operations") {
+        Matrix<3, 3, float> m{1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f};
+        SquareMatrix<3, float> sm{1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f};
+        REQUIRE_FALSE(is_same<decltype(sm), decltype(m)>::value);
+        REQUIRE(is_same<decltype(sm), decltype(sm + 1.0f)>::value);
+        REQUIRE(is_same<decltype(sm), decltype(sm - 1.0f)>::value);
+        REQUIRE(is_same<decltype(sm), decltype(sm * 1.0f)>::value);
+        REQUIRE(is_same<decltype(sm), decltype(-sm)>::value);
+        REQUIRE(is_same<decltype(sm), decltype(1.0f + sm)>::value);
+        REQUIRE(is_same<decltype(sm), decltype(1.0f - sm)>::value);
+        REQUIRE(is_same<decltype(sm), decltype(1.0f * sm)>::value);
+        REQUIRE(is_same<decltype(sm), decltype(sm + sm)>::value);
+        REQUIRE(is_same<SquareMatrix<3, float>, decltype(sm - sm)>::value);
+        REQUIRE(is_same<SquareMatrix<3, float>, decltype(sm * sm)>::value);
+
+        REQUIRE(is_same<SquareMatrix<3, float>, decltype(SquareMatrix<3, float>::Identity())>::value);
+        REQUIRE(is_same<SquareMatrix<3, float>, decltype(SquareMatrix<3, float>::Null())>::value);
+        REQUIRE(is_same<SquareMatrix<3, float>, decltype(SquareMatrix<3, float>::NaN())>::value);
+    }
+
     SECTION("Diagonal vector") {
         SquareMatrix<3, float> m1{1.0f, 0.0f, 0.0f, 0.0f, 2.0f, 0.0f, 0.0f, 0.0f, 3.0f};
         Vector<3, float> v = m1.diag();

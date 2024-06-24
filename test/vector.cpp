@@ -1,4 +1,5 @@
 #include <tinyso3/Vector.hpp>
+#include <tinyso3/tiny_type_traits.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
@@ -19,6 +20,20 @@ TEST_CASE("Vector") {
         for(size_t i = 0; i < 5; i++) {
             REQUIRE(v2(i, 0) == v3(i, 0));
         }
+    }
+
+    SECTION("Group Operations") {
+        Vector<3, float> v1{1.0f, 2.0f, 3.0f};
+        REQUIRE(is_same<decltype(v1), decltype(v1 + 1.0f)>::value);
+        REQUIRE(is_same<decltype(v1), decltype(v1 - 1.0f)>::value);
+        REQUIRE(is_same<decltype(v1), decltype(v1 * 1.0f)>::value);
+        REQUIRE(is_same<decltype(v1), decltype(-v1)>::value);
+        REQUIRE(is_same<decltype(v1), decltype(1.0f + v1)>::value);
+        REQUIRE(is_same<decltype(v1), decltype(1.0f - v1)>::value);
+        REQUIRE(is_same<decltype(v1), decltype(1.0f * v1)>::value);
+        REQUIRE(is_same<decltype(v1), decltype(v1 + v1)>::value);
+        REQUIRE(is_same<decltype(v1), decltype(v1 - v1)>::value);
+        REQUIRE(is_same<decltype(v1), decltype(v1 * v1)>::value);
     }
 
     SECTION("Accessors") {

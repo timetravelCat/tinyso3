@@ -9,6 +9,8 @@
 
 #include "version.hpp"
 #include "tiny_type_traits.hpp"
+#include "tiny_utility.hpp"
+#include "epsilon.hpp"
 #include "EigenSolver.hpp"
 
 namespace tinyso3 {
@@ -51,6 +53,21 @@ public:
     RotationMatrix(const SquareMatrix<3, Type>& other);
 
     /**
+     * SO3 Group Operations
+     */
+    using SquareMatrix<3, Type>::operator*;
+    inline RotationMatrix operator*(const RotationMatrix& other) const { return SquareMatrix<3, Type>::operator*(other); }
+    inline void operator*=(const RotationMatrix& other) { SquareMatrix<3, Type>::operator*=(other); }
+    using SquareMatrix<3, Type>::transpose;
+    inline RotationMatrix transpose() const { return SquareMatrix<3, Type>::transpose(); }
+    using SquareMatrix<3, Type>::T;
+    inline RotationMatrix T() const { return SquareMatrix<3, Type>::transpose(); }
+    using SquareMatrix<3, Type>::inverse;
+    inline RotationMatrix inverse() const { return SquareMatrix<3, Type>::transpose(); }
+
+    static inline RotationMatrix Identity() { return SquareMatrix<3, Type>::Identity(); }
+
+    /**
      * Principal Rotations
      */
     template<typename Axis,
@@ -74,6 +91,28 @@ public:
      * See "State Estimation for Robotics - Timothy D. Barfoot - 2017 - p. 257"
      */
     void normalize();
+
+    /**
+     * Returns the logarithm of the rotation matrix.
+     */
+    SquareMatrix<3, Type> log() const;
+
+    /**
+     * Returns the power of the rotation matrix.
+     */
+    RotationMatrix pow(const Type& t) const;
+
+    /**
+     * Interpolates between two rotation matrices.
+     * 
+     * ACTIVE : R = R1 * (R1^(T) * R2)^t
+     * PASSIVE : R = (R2 * R1^(T))^t * R1
+     */
+    template<typename T = TINYSO3_DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION>
+    RotationMatrix interpolate(const RotationMatrix& to, const Type& t) const;
+
+    using SquareMatrix<3, Type>::Identity;
+    using SquareMatrix<3, Type>::Null;
 };
 
 template<typename Type>
@@ -104,6 +143,44 @@ RotationMatrix<Type> RotationMatrix<Type>::RotatePrincipalAxis(const Type& angle
         } else if(is_same<Axis, Z>::value) {
             return RotationMatrix<Type>{::cos(angle), ::sin(angle), Type(0), -::sin(angle), ::cos(angle), Type(0), Type(0), Type(0), Type(1)};
         }
+    }
+
+    // Can not reach here, just for suppressing warning.
+    return RotationMatrix<Type>{};
+}
+
+template<typename Type>
+SquareMatrix<3, Type> RotationMatrix<Type>::log() const {
+    const Type theta = ::acos(constrain((this->trace() - Type(1)) / Type(2), Type(-1), Type(1)));
+    return theta < epsilon<Type>() ? Null() : theta / (Type(2) * ::sin(theta)) * (*this - this->T());
+}
+
+template<typename Type>
+RotationMatrix<Type> RotationMatrix<Type>::pow(const Type& t) const {
+    Vector3<Type> a = t * this->log().vee();
+    const Type theta = a.norm();
+
+    if(theta < epsilon<Type>()) {
+        return Identity();
+    }
+
+    a /= theta;
+
+    const Type c = ::cos(theta);
+    const Type s = ::sin(theta);
+
+    return c * Identity() + (Type(1) - c) * a * a.T() + s * a.hat();
+}
+
+template<typename Type>
+template<typename T>
+RotationMatrix<Type> RotationMatrix<Type>::interpolate(const RotationMatrix& to, const Type& t) const {
+    const RotationMatrix<Type>& from = *this;
+
+    if(is_same<T, ACTIVE>::value) {
+        return from * (from.T() * to).pow(t);
+    } else if(is_same<T, PASSIVE>::value) {
+        return (to * from.T()).pow(t) * from;
     }
 
     // Can not reach here, just for suppressing warning.

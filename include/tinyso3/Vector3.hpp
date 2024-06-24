@@ -25,6 +25,26 @@ public:
     Vector3(const Vector<3, Type>& other);
 
     /**
+     * Vector3 Group Operations
+     */
+    using Vector<3, Type>::operator+;
+    inline Vector3 operator+(Type scalar) const { return Vector<3, Type>::operator+(scalar); };
+    using Vector<3, Type>::operator-;
+    inline Vector3 operator-(Type scalar) const { return Vector<3, Type>::operator-(scalar); };
+    using Vector<3, Type>::operator*;
+    inline Vector3 operator*(Type scalar) const { return Vector<3, Type>::operator*(scalar); };
+    using Vector<3, Type>::operator/;
+    inline Vector3 operator/(Type scalar) const { return Vector<3, Type>::operator/(scalar); };
+    inline Vector3 operator-() const { return Vector<3, Type>::operator-(); };
+
+    inline friend Vector3 operator+(Type lhs, const Vector3& rhs) { return rhs + lhs; }
+    inline friend Vector3 operator-(Type lhs, const Vector3& rhs) { return -rhs + lhs; };
+    inline friend Vector3 operator*(Type lhs, const Vector3& rhs) { return rhs * lhs; };
+    inline Vector3 operator+(const Vector3& other) const { return Vector<3, Type>::operator+(other); };
+    inline Vector3 operator-(const Vector3& other) const { return Vector<3, Type>::operator-(other); };
+    inline Vector3 operator*(const Vector3& other) const { return Vector<3, Type>::operator*(other); };
+
+    /**
      * Accessors
      */
     using Vector<3, Type>::operator();
