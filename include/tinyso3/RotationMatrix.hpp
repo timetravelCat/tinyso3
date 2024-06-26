@@ -15,11 +15,14 @@
 
 namespace tinyso3 {
 
-enum class PrincipalAxis {
+enum class PrincipalAxis { // Do not change the order and values.
     X,
     Y,
     Z
 };
+static_assert(static_cast<int>(PrincipalAxis::X) == 0, "PrincipalAxis::X must be 0.");
+static_assert(static_cast<int>(PrincipalAxis::Y) == 1, "PrincipalAxis::Y must be 1.");
+static_assert(static_cast<int>(PrincipalAxis::Z) == 2, "PrincipalAxis::Z must be 2.");
 
 using X = integral_constant<PrincipalAxis, PrincipalAxis::X>;
 using Y = integral_constant<PrincipalAxis, PrincipalAxis::Y>;
@@ -39,6 +42,9 @@ using PASSIVE = integral_constant<RotationMatrixTransformConvention, RotationMat
 template<typename T>
 struct is_integral_constant_of_rotation_matrix_transform_convention;
 
+template<typename EulerSequence, typename Type>
+class Euler;
+
 template<typename RotationMatrixTransformConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION,
          typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 class RotationMatrix : public SquareMatrix<3, Type> {
@@ -56,6 +62,9 @@ public:
     using SquareMatrix<3, Type>::SquareMatrix;
 
     RotationMatrix(const SquareMatrix<3, Type>& other);
+
+    template<typename EulerSequence>
+    RotationMatrix(const Euler<EulerSequence, Type>& euler);
 
     /**
      * SO3 Group Operations
@@ -118,6 +127,20 @@ public:
 template<typename RotationMatrixTransformConvention, typename Type>
 RotationMatrix<RotationMatrixTransformConvention, Type>::RotationMatrix(const SquareMatrix<3, Type>& other) :
 SquareMatrix<3, Type>(other) {
+}
+
+template<typename RotationMatrixTransformConvention, typename Type>
+template<typename EulerSequence>
+RotationMatrix<RotationMatrixTransformConvention, Type>::RotationMatrix(const Euler<EulerSequence, Type>& euler) {
+    if(is_same<RotationMatrixTransformConvention, ACTIVE>::value) {
+        (*this) = RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis1>>(euler(0)) *
+                  RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis2>>(euler(1)) *
+                  RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis3>>(euler(2));
+    } else if(is_same<RotationMatrixTransformConvention, PASSIVE>::value) {
+        (*this) = RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis3>>(euler(2)) *
+                  RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis2>>(euler(1)) *
+                  RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis1>>(euler(0));
+    }
 }
 
 template<typename RotationMatrixTransformConvention, typename Type>
