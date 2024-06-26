@@ -81,7 +81,7 @@ public:
     }
 
 private:
-    template<typename _Type>
+    template<typename _Convention, typename _Type>
     friend class RotationMatrix;
 };
 

@@ -6,35 +6,35 @@ using namespace tinyso3;
 
 TEST_CASE("RotationMatrix") {
     SECTION("Constructors") {
-        RotationMatrix<float> m1{1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+        RotationMatrix<ACTIVE, float> m1{1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
     }
 
     SECTION("SO3 Group Operations") {
-        RotationMatrix<float> m1{1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-        RotationMatrix<float> m2{1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+        RotationMatrix<ACTIVE, float> m1{1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+        RotationMatrix<ACTIVE, float> m2{1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
 
-        REQUIRE(is_same<RotationMatrix<float>, decltype(m1 * m2)>::value);
-        REQUIRE(is_same<RotationMatrix<float>, decltype(m1.transpose())>::value);
-        REQUIRE(is_same<RotationMatrix<float>, decltype(m1.T())>::value);
-        REQUIRE(is_same<RotationMatrix<float>, decltype(m1.inverse())>::value);
+        REQUIRE(is_same<RotationMatrix<ACTIVE, float>, decltype(m1 * m2)>::value);
+        REQUIRE(is_same<RotationMatrix<ACTIVE, float>, decltype(m1.transpose())>::value);
+        REQUIRE(is_same<RotationMatrix<ACTIVE, float>, decltype(m1.T())>::value);
+        REQUIRE(is_same<RotationMatrix<ACTIVE, float>, decltype(m1.inverse())>::value);
 
-        REQUIRE(is_same<RotationMatrix<float>, decltype(RotationMatrix<float>::Identity())>::value);
-        REQUIRE_FALSE(is_same<RotationMatrix<float>, decltype(RotationMatrix<float>::Null())>::value);
-        REQUIRE_FALSE(is_same<RotationMatrix<float>, decltype(RotationMatrix<float>::NaN())>::value);
+        REQUIRE(is_same<RotationMatrix<ACTIVE, float>, decltype(RotationMatrix<ACTIVE, float>::Identity())>::value);
+        REQUIRE_FALSE(is_same<RotationMatrix<ACTIVE, float>, decltype(RotationMatrix<ACTIVE, float>::Null())>::value);
+        REQUIRE_FALSE(is_same<RotationMatrix<ACTIVE, float>, decltype(RotationMatrix<ACTIVE, float>::NaN())>::value);
     }
 
     SECTION("Principal Rotations") {
-        const RotationMatrix<float> x_active = RotationMatrix<float>::RotatePrincipalAxis<X, ACTIVE>(M_PIf / 6.0f);
-        const RotationMatrix<float> y_active = RotationMatrix<float>::RotatePrincipalAxis<Y, ACTIVE>(M_PIf / 6.0f);
-        const RotationMatrix<float> z_active = RotationMatrix<float>::RotatePrincipalAxis<Z, ACTIVE>(M_PIf / 6.0f);
+        const RotationMatrix<ACTIVE, float> x_active = RotationMatrix<ACTIVE, float>::RotatePrincipalAxis<X>(M_PIf / 6.0f);
+        const RotationMatrix<ACTIVE, float> y_active = RotationMatrix<ACTIVE, float>::RotatePrincipalAxis<Y>(M_PIf / 6.0f);
+        const RotationMatrix<ACTIVE, float> z_active = RotationMatrix<ACTIVE, float>::RotatePrincipalAxis<Z>(M_PIf / 6.0f);
 
-        const RotationMatrix<float> x_passive = RotationMatrix<float>::RotatePrincipalAxis<X, PASSIVE>(M_PIf / 6.0f);
-        const RotationMatrix<float> y_passive = RotationMatrix<float>::RotatePrincipalAxis<Y, PASSIVE>(M_PIf / 6.0f);
-        const RotationMatrix<float> z_passive = RotationMatrix<float>::RotatePrincipalAxis<Z, PASSIVE>(M_PIf / 6.0f);
+        const RotationMatrix<PASSIVE, float> x_passive = RotationMatrix<PASSIVE, float>::RotatePrincipalAxis<X>(M_PIf / 6.0f);
+        const RotationMatrix<PASSIVE, float> y_passive = RotationMatrix<PASSIVE, float>::RotatePrincipalAxis<Y>(M_PIf / 6.0f);
+        const RotationMatrix<PASSIVE, float> z_passive = RotationMatrix<PASSIVE, float>::RotatePrincipalAxis<Z>(M_PIf / 6.0f);
 
-        const RotationMatrix<float> x_passive_transpose = x_passive.T();
-        const RotationMatrix<float> y_passive_transpose = y_passive.T();
-        const RotationMatrix<float> z_passive_transpose = z_passive.T();
+        const RotationMatrix<ACTIVE, float> x_passive_transpose = x_passive.T();
+        const RotationMatrix<ACTIVE, float> y_passive_transpose = y_passive.T();
+        const RotationMatrix<ACTIVE, float> z_passive_transpose = z_passive.T();
 
         for(size_t i = 0; i < 3; i++) {
             for(size_t j = 0; j < 3; j++) {
@@ -90,7 +90,7 @@ TEST_CASE("RotationMatrix") {
          * 
          * Which is the closest to the original matrix.
          */
-        RotationMatrix<float> m{1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+        RotationMatrix<ACTIVE, float> m{1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
         m.normalize();
 
         Vector3<float> col0 = m.col<0>();
@@ -107,7 +107,7 @@ TEST_CASE("RotationMatrix") {
     }
 
     SECTION("log and pow") {
-        RotationMatrix<float> m1 = RotationMatrix<float>::Identity();
+        RotationMatrix<ACTIVE, float> m1 = RotationMatrix<ACTIVE, float>::Identity();
         SquareMatrix<3, float> m1_log = m1.log();
 
         // log of identity matrix should be zero matrix.
@@ -118,7 +118,7 @@ TEST_CASE("RotationMatrix") {
         }
 
         // pow of identity matrix should be identity matrix.
-        RotationMatrix<float> m2 = m1.pow(0.5f);
+        RotationMatrix<ACTIVE, float> m2 = m1.pow(0.5f);
         for(size_t i = 0; i < 3; i++) {
             for(size_t j = 0; j < 3; j++) {
                 if(i == j) {
@@ -129,7 +129,7 @@ TEST_CASE("RotationMatrix") {
             }
         }
 
-        const RotationMatrix<float> x_active = RotationMatrix<float>::RotatePrincipalAxis<X, ACTIVE>(M_PIf / 6.0f);
+        const RotationMatrix<ACTIVE, float> x_active = RotationMatrix<ACTIVE, float>::RotatePrincipalAxis<X>(M_PIf / 6.0f);
         SquareMatrix<3, float> x_active_log = x_active.log();
         REQUIRE_THAT(x_active_log(0, 0), Catch::Matchers::WithinRel(0.0f, 1e-6f));
         REQUIRE_THAT(x_active_log(0, 1), Catch::Matchers::WithinRel(0.0f, 1e-6f));
@@ -141,7 +141,7 @@ TEST_CASE("RotationMatrix") {
         REQUIRE_THAT(x_active_log(2, 1), Catch::Matchers::WithinRel(M_PIf / 6.0f, 1e-6f));
         REQUIRE_THAT(x_active_log(2, 2), Catch::Matchers::WithinRel(0.0f, 1e-6f));
 
-        const RotationMatrix<float> y_active = RotationMatrix<float>::RotatePrincipalAxis<Y, ACTIVE>(M_PIf / 6.0f);
+        const RotationMatrix<ACTIVE, float> y_active = RotationMatrix<ACTIVE, float>::RotatePrincipalAxis<Y>(M_PIf / 6.0f);
         SquareMatrix<3, float> y_active_log = y_active.log();
         REQUIRE_THAT(y_active_log(0, 0), Catch::Matchers::WithinRel(0.0f, 1e-6f));
         REQUIRE_THAT(y_active_log(0, 1), Catch::Matchers::WithinRel(0.0f, 1e-6f));
@@ -153,7 +153,7 @@ TEST_CASE("RotationMatrix") {
         REQUIRE_THAT(y_active_log(2, 1), Catch::Matchers::WithinRel(0.0f, 1e-6f));
         REQUIRE_THAT(y_active_log(2, 2), Catch::Matchers::WithinRel(0.0f, 1e-6f));
 
-        const RotationMatrix<float> z_active = RotationMatrix<float>::RotatePrincipalAxis<Z, ACTIVE>(M_PIf / 6.0f);
+        const RotationMatrix<ACTIVE, float> z_active = RotationMatrix<ACTIVE, float>::RotatePrincipalAxis<Z>(M_PIf / 6.0f);
         SquareMatrix<3, float> z_active_log = z_active.log();
         REQUIRE_THAT(z_active_log(0, 0), Catch::Matchers::WithinRel(0.0f, 1e-6f));
         REQUIRE_THAT(z_active_log(0, 1), Catch::Matchers::WithinRel(-M_PIf / 6.0f, 1e-6f));
@@ -165,7 +165,7 @@ TEST_CASE("RotationMatrix") {
         REQUIRE_THAT(z_active_log(2, 1), Catch::Matchers::WithinRel(0.0f, 1e-6f));
         REQUIRE_THAT(z_active_log(2, 2), Catch::Matchers::WithinRel(0.0f, 1e-6f));
 
-        const RotationMatrix<float> x_active_pow_log = x_active.pow(0.5f).log();
+        const RotationMatrix<ACTIVE, float> x_active_pow_log = x_active.pow(0.5f).log();
         REQUIRE_THAT(x_active_pow_log(0, 0), Catch::Matchers::WithinRel(0.0f, 1e-6f));
         REQUIRE_THAT(x_active_pow_log(0, 1), Catch::Matchers::WithinRel(0.0f, 1e-6f));
         REQUIRE_THAT(x_active_pow_log(0, 2), Catch::Matchers::WithinRel(0.0f, 1e-6f));
@@ -176,7 +176,7 @@ TEST_CASE("RotationMatrix") {
         REQUIRE_THAT(x_active_pow_log(2, 1), Catch::Matchers::WithinRel(M_PIf / 12.0f, 1e-6f));
         REQUIRE_THAT(x_active_pow_log(2, 2), Catch::Matchers::WithinRel(0.0f, 1e-6f));
 
-        const RotationMatrix<float> y_active_pow_log = y_active.pow(0.5f).log();
+        const RotationMatrix<ACTIVE, float> y_active_pow_log = y_active.pow(0.5f).log();
         REQUIRE_THAT(y_active_pow_log(0, 0), Catch::Matchers::WithinRel(0.0f, 1e-6f));
         REQUIRE_THAT(y_active_pow_log(0, 1), Catch::Matchers::WithinRel(0.0f, 1e-6f));
         REQUIRE_THAT(y_active_pow_log(0, 2), Catch::Matchers::WithinRel(M_PIf / 12.0f, 1e-6f));
@@ -187,7 +187,7 @@ TEST_CASE("RotationMatrix") {
         REQUIRE_THAT(y_active_pow_log(2, 1), Catch::Matchers::WithinRel(0.0f, 1e-6f));
         REQUIRE_THAT(y_active_pow_log(2, 2), Catch::Matchers::WithinRel(0.0f, 1e-6f));
 
-        const RotationMatrix<float> z_active_pow_log = z_active.pow(0.5f).log();
+        const RotationMatrix<ACTIVE, float> z_active_pow_log = z_active.pow(0.5f).log();
         REQUIRE_THAT(z_active_pow_log(0, 0), Catch::Matchers::WithinRel(0.0f, 1e-6f));
         REQUIRE_THAT(z_active_pow_log(0, 1), Catch::Matchers::WithinRel(-M_PIf / 12.0f, 1e-6f));
         REQUIRE_THAT(z_active_pow_log(0, 2), Catch::Matchers::WithinRel(0.0f, 1e-6f));
@@ -200,10 +200,10 @@ TEST_CASE("RotationMatrix") {
     }
 
     SECTION("Interpolation") {
-        const RotationMatrix<float> x_active_from = RotationMatrix<float>::RotatePrincipalAxis<X, ACTIVE>(M_PIf / 6.0f);
-        const RotationMatrix<float> x_active_to = RotationMatrix<float>::RotatePrincipalAxis<X, ACTIVE>(M_PIf / 2.0f);
-        const RotationMatrix<float> x_active = RotationMatrix<float>::RotatePrincipalAxis<X, ACTIVE>(M_PIf / 3.0f);
-        const RotationMatrix<float> x_active_interpolated = x_active_from.interpolate<ACTIVE>(x_active_to, 0.5f);
+        const RotationMatrix<ACTIVE, float> x_active_from = RotationMatrix<ACTIVE, float>::RotatePrincipalAxis<X>(M_PIf / 6.0f);
+        const RotationMatrix<ACTIVE, float> x_active_to = RotationMatrix<ACTIVE, float>::RotatePrincipalAxis<X>(M_PIf / 2.0f);
+        const RotationMatrix<ACTIVE, float> x_active = RotationMatrix<ACTIVE, float>::RotatePrincipalAxis<X>(M_PIf / 3.0f);
+        const RotationMatrix<ACTIVE, float> x_active_interpolated = x_active_from.interpolate(x_active_to, 0.5f);
 
         for(size_t i = 0; i < 3; i++) {
             for(size_t j = 0; j < 3; j++) {
@@ -211,10 +211,10 @@ TEST_CASE("RotationMatrix") {
             }
         }
 
-        const RotationMatrix<float> x_passive_from = RotationMatrix<float>::RotatePrincipalAxis<X, PASSIVE>(M_PIf / 6.0f);
-        const RotationMatrix<float> x_passive_to = RotationMatrix<float>::RotatePrincipalAxis<X, PASSIVE>(M_PIf / 2.0f);
-        const RotationMatrix<float> x_passive = RotationMatrix<float>::RotatePrincipalAxis<X, PASSIVE>(M_PIf / 3.0f);
-        const RotationMatrix<float> x_passive_interpolated = x_passive_from.interpolate<PASSIVE>(x_passive_to, 0.5f);
+        const RotationMatrix<PASSIVE, float> x_passive_from = RotationMatrix<PASSIVE, float>::RotatePrincipalAxis<X>(M_PIf / 6.0f);
+        const RotationMatrix<PASSIVE, float> x_passive_to = RotationMatrix<PASSIVE, float>::RotatePrincipalAxis<X>(M_PIf / 2.0f);
+        const RotationMatrix<PASSIVE, float> x_passive = RotationMatrix<PASSIVE, float>::RotatePrincipalAxis<X>(M_PIf / 3.0f);
+        const RotationMatrix<PASSIVE, float> x_passive_interpolated = x_passive_from.interpolate(x_passive_to, 0.5f);
 
         for(size_t i = 0; i < 3; i++) {
             for(size_t j = 0; j < 3; j++) {

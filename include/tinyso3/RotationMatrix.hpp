@@ -39,12 +39,17 @@ using PASSIVE = integral_constant<RotationMatrixTransformConvention, RotationMat
 template<typename T>
 struct is_integral_constant_of_rotation_matrix_transform_convention;
 
-template<typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
+template<typename RotationMatrixTransformConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION,
+         typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 class RotationMatrix : public SquareMatrix<3, Type> {
 protected:
+    static_assert(is_integral_constant_of_rotation_matrix_transform_convention<RotationMatrixTransformConvention>::value,
+                  "RotationMatrixTransformConvention must be PASSIVE(ALIAS) or ACTIVE(ALIBI).");
     using SquareMatrix<3, Type>::data;
 
 public:
+    using Convention = RotationMatrixTransformConvention;
+
     /**
      * Constructors
      */
@@ -70,12 +75,8 @@ public:
     /**
      * Principal Rotations
      */
-    template<typename Axis,
-             typename T = TINYSO3_DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION,
-             enable_if_t<(is_integral_constant_of_principal_rotation_axis<Axis>::value &&
-                          is_integral_constant_of_rotation_matrix_transform_convention<T>::value),
-                         int> = 0>
-    static RotationMatrix<Type> RotatePrincipalAxis(const Type& angle);
+    template<typename Axis, enable_if_t<(is_integral_constant_of_principal_rotation_axis<Axis>::value), int> = 0>
+    static RotationMatrix RotatePrincipalAxis(const Type& angle);
 
     /**
      * Normalizes the rotation matrix.
@@ -108,55 +109,50 @@ public:
      * ACTIVE : R = R1 * (R1^(T) * R2)^t
      * PASSIVE : R = (R2 * R1^(T))^t * R1
      */
-    template<typename T = TINYSO3_DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION>
     RotationMatrix interpolate(const RotationMatrix& to, const Type& t) const;
 
     using SquareMatrix<3, Type>::Identity;
     using SquareMatrix<3, Type>::Null;
 };
 
-template<typename Type>
-RotationMatrix<Type>::RotationMatrix(const SquareMatrix<3, Type>& other) :
+template<typename RotationMatrixTransformConvention, typename Type>
+RotationMatrix<RotationMatrixTransformConvention, Type>::RotationMatrix(const SquareMatrix<3, Type>& other) :
 SquareMatrix<3, Type>(other) {
 }
 
-template<typename Type>
-template<typename Axis,
-         typename T,
-         enable_if_t<(is_integral_constant_of_principal_rotation_axis<Axis>::value &&
-                      is_integral_constant_of_rotation_matrix_transform_convention<T>::value),
-                     int>>
-RotationMatrix<Type> RotationMatrix<Type>::RotatePrincipalAxis(const Type& angle) {
-    if(is_same<T, ACTIVE>::value) {
+template<typename RotationMatrixTransformConvention, typename Type>
+template<typename Axis, enable_if_t<(is_integral_constant_of_principal_rotation_axis<Axis>::value), int>>
+RotationMatrix<RotationMatrixTransformConvention, Type> RotationMatrix<RotationMatrixTransformConvention, Type>::RotatePrincipalAxis(const Type& angle) {
+    if(is_same<RotationMatrixTransformConvention, ACTIVE>::value) {
         if(is_same<Axis, X>::value) {
-            return RotationMatrix<Type>{Type(1), Type(0), Type(0), Type(0), ::cos(angle), -::sin(angle), Type(0), ::sin(angle), ::cos(angle)};
+            return RotationMatrix{Type(1), Type(0), Type(0), Type(0), ::cos(angle), -::sin(angle), Type(0), ::sin(angle), ::cos(angle)};
         } else if(is_same<Axis, Y>::value) {
-            return RotationMatrix<Type>{::cos(angle), Type(0), ::sin(angle), Type(0), Type(1), Type(0), -::sin(angle), Type(0), ::cos(angle)};
+            return RotationMatrix{::cos(angle), Type(0), ::sin(angle), Type(0), Type(1), Type(0), -::sin(angle), Type(0), ::cos(angle)};
         } else if(is_same<Axis, Z>::value) {
-            return RotationMatrix<Type>{::cos(angle), -::sin(angle), Type(0), ::sin(angle), ::cos(angle), Type(0), Type(0), Type(0), Type(1)};
+            return RotationMatrix{::cos(angle), -::sin(angle), Type(0), ::sin(angle), ::cos(angle), Type(0), Type(0), Type(0), Type(1)};
         }
-    } else if(is_same<T, PASSIVE>::value) {
+    } else if(is_same<RotationMatrixTransformConvention, PASSIVE>::value) {
         if(is_same<Axis, X>::value) {
-            return RotationMatrix<Type>{Type(1), Type(0), Type(0), Type(0), ::cos(angle), ::sin(angle), Type(0), -::sin(angle), ::cos(angle)};
+            return RotationMatrix{Type(1), Type(0), Type(0), Type(0), ::cos(angle), ::sin(angle), Type(0), -::sin(angle), ::cos(angle)};
         } else if(is_same<Axis, Y>::value) {
-            return RotationMatrix<Type>{::cos(angle), Type(0), -::sin(angle), Type(0), Type(1), Type(0), ::sin(angle), Type(0), ::cos(angle)};
+            return RotationMatrix{::cos(angle), Type(0), -::sin(angle), Type(0), Type(1), Type(0), ::sin(angle), Type(0), ::cos(angle)};
         } else if(is_same<Axis, Z>::value) {
-            return RotationMatrix<Type>{::cos(angle), ::sin(angle), Type(0), -::sin(angle), ::cos(angle), Type(0), Type(0), Type(0), Type(1)};
+            return RotationMatrix{::cos(angle), ::sin(angle), Type(0), -::sin(angle), ::cos(angle), Type(0), Type(0), Type(0), Type(1)};
         }
     }
 
     // Can not reach here, just for suppressing warning.
-    return RotationMatrix<Type>{};
+    return RotationMatrix{};
 }
 
-template<typename Type>
-SquareMatrix<3, Type> RotationMatrix<Type>::log() const {
+template<typename RotationMatrixTransformConvention, typename Type>
+SquareMatrix<3, Type> RotationMatrix<RotationMatrixTransformConvention, Type>::log() const {
     const Type theta = ::acos(constrain((this->trace() - Type(1)) / Type(2), Type(-1), Type(1)));
     return theta < epsilon<Type>() ? Null() : theta / (Type(2) * ::sin(theta)) * (*this - this->T());
 }
 
-template<typename Type>
-RotationMatrix<Type> RotationMatrix<Type>::pow(const Type& t) const {
+template<typename RotationMatrixTransformConvention, typename Type>
+RotationMatrix<RotationMatrixTransformConvention, Type> RotationMatrix<RotationMatrixTransformConvention, Type>::pow(const Type& t) const {
     Vector3<Type> a = t * this->log().vee();
     const Type theta = a.norm();
 
@@ -172,23 +168,22 @@ RotationMatrix<Type> RotationMatrix<Type>::pow(const Type& t) const {
     return c * Identity() + (Type(1) - c) * a * a.T() + s * a.hat();
 }
 
-template<typename Type>
-template<typename T>
-RotationMatrix<Type> RotationMatrix<Type>::interpolate(const RotationMatrix& to, const Type& t) const {
-    const RotationMatrix<Type>& from = *this;
+template<typename RotationMatrixTransformConvention, typename Type>
+RotationMatrix<RotationMatrixTransformConvention, Type> RotationMatrix<RotationMatrixTransformConvention, Type>::interpolate(const RotationMatrix& to, const Type& t) const {
+    const RotationMatrix& from = *this;
 
-    if(is_same<T, ACTIVE>::value) {
+    if(is_same<RotationMatrixTransformConvention, ACTIVE>::value) {
         return from * (from.T() * to).pow(t);
-    } else if(is_same<T, PASSIVE>::value) {
+    } else if(is_same<RotationMatrixTransformConvention, PASSIVE>::value) {
         return (to * from.T()).pow(t) * from;
     }
 
     // Can not reach here, just for suppressing warning.
-    return RotationMatrix<Type>{};
+    return RotationMatrix{};
 }
 
-template<typename Type>
-void RotationMatrix<Type>::normalize() {
+template<typename RotationMatrixTransformConvention, typename Type>
+void RotationMatrix<RotationMatrixTransformConvention, Type>::normalize() {
     // Get eigenvalues & eigenvectors of R*R^T
     const SquareMatrix<3, Type> RRt = (*this) * (this->T());
     const array<EigenPair<Type>, 3> eigenpairs = EigenSolver<Type>{}(RRt);
@@ -226,7 +221,7 @@ using ALIBI = ACTIVE;
 using ALIAS = PASSIVE;
 
 template<typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
-using DirectionCosineMatrix = RotationMatrix<Type>;
+using DirectionCosineMatrix = RotationMatrix<RotationMatrixTransformConvention, Type>;
 template<typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 using DCM = DirectionCosineMatrix<Type>;
 
