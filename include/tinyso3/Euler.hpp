@@ -30,6 +30,8 @@
  * PASSIVE principal rotation matrix is transpose of ACTIVE principal rotation matrix.
  * 
  * Euler class contains 3 angles, in order of rotation.
+ * In case of gimbal lock, there are infinite solutions.
+ * Here, we set first rotation angle to 0.
  * 
  * @author timetravelCat<timetraveler930@gmail.com>
  */
@@ -114,26 +116,32 @@ Euler<EulerSequence, Type>::Euler(const RotationMatrix<Convention, Type>& dcm) {
     }
 
     /**
-     * In case of gimbal lock, there are infinite solutions.
-     * 
-     * Here, we set first rotation angle to 0.
-     * ! WIP
+     * In case of gimbal lock.
      */
     if(AXIS_FIRST == AXIS_THIRD) { // Proper Euler angles
         if(::fabs(data[1][0]) < epsilon<Type>()) {
             data[0][0] = Type(0);
-            // ! WIP
+            data[2][0] = is_same<Convention, ACTIVE>::value ?
+                           ::atan2(-SIGN * dcm(AXIS_SECOND, AXIS_LEFT), dcm(AXIS_SECOND, AXIS_SECOND)) :
+                           ::atan2(-SIGN * dcm(AXIS_LEFT, AXIS_SECOND), dcm(AXIS_SECOND, AXIS_SECOND));
+
         } else if(::fabs(data[1][0] - Type(M_PI)) < epsilon<Type>()) {
             data[0][0] = Type(0);
-            // ! WIP
+            data[2][0] = is_same<Convention, ACTIVE>::value ?
+                           ::atan2(-SIGN * dcm(AXIS_SECOND, AXIS_LEFT), dcm(AXIS_SECOND, AXIS_SECOND)) :
+                           ::atan2(-SIGN * dcm(AXIS_LEFT, AXIS_SECOND), dcm(AXIS_SECOND, AXIS_SECOND));
         }
     } else { // Tait-Bryan angles
         if(::fabs(data[1][0] - Type(M_PI_2)) < epsilon<Type>()) {
             data[0][0] = Type(0);
-            // ! WIP
+            data[2][0] = is_same<Convention, ACTIVE>::value ?
+                           ::atan2(dcm(AXIS_THIRD, AXIS_SECOND), -SIGN * dcm(AXIS_THIRD, AXIS_FIRST)) :
+                           ::atan2(dcm(AXIS_SECOND, AXIS_THIRD), -SIGN * dcm(AXIS_FIRST, AXIS_THIRD));
         } else if(::fabs(data[1][0] + Type(M_PI_2)) < epsilon<Type>()) {
             data[0][0] = Type(0);
-            // ! WIP
+            data[2][0] = is_same<Convention, ACTIVE>::value ?
+                           ::atan2(-dcm(AXIS_THIRD, AXIS_SECOND), SIGN * dcm(AXIS_THIRD, AXIS_FIRST)) :
+                           ::atan2(-dcm(AXIS_SECOND, AXIS_THIRD), SIGN * dcm(AXIS_FIRST, AXIS_THIRD));
         }
     }
 };
