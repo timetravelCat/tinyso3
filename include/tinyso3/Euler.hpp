@@ -80,9 +80,15 @@ public:
      */
     using Vector3<Type>::Vector3;
 
+    Euler(const Euler& other);
+
     template<typename Convention>
     Euler(const RotationMatrix<Convention, Type>& dcm);
 };
+
+template<typename EulerSequence, typename Type>
+Euler<EulerSequence, Type>::Euler(const Euler& other) :
+Vector3<Type>(other){};
 
 template<typename EulerSequence, typename Type>
 template<typename Convention>
