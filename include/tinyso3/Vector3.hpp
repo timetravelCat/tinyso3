@@ -11,6 +11,9 @@
 #include "Vector.hpp"
 
 namespace tinyso3 {
+template<size_t M, typename Type>
+class SquareMatrix;
+
 template<typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 class Vector3 : public Vector<3, Type> {
 protected:
@@ -44,6 +47,8 @@ public:
     inline Vector3 operator-(const Vector3& other) const { return Vector<3, Type>::operator-(other); };
     inline Vector3 operator*(const Vector3& other) const { return Vector<3, Type>::operator*(other); };
 
+    inline Vector3 unit() const { return Vector<3, Type>::unit(); }
+
     /**
      * Accessors
      */
@@ -58,7 +63,7 @@ public:
     /**
      * Hat operator
      */
-    Matrix<3, 3, Type> hat() const;
+    SquareMatrix<3, Type> hat() const;
 };
 
 template<typename Type>
@@ -79,7 +84,7 @@ Vector3<Type> Vector3<Type>::operator%(const Vector3& v) const {
 }
 
 template<typename Type>
-Matrix<3, 3, Type> Vector3<Type>::hat() const {
-    return Matrix<3, 3, Type>{Type(0), -data[2][0], data[1][0], data[2][0], Type(0), -data[0][0], -data[1][0], data[0][0], Type(0)};
+SquareMatrix<3, Type> Vector3<Type>::hat() const {
+    return SquareMatrix<3, Type>{Type(0), -data[2][0], data[1][0], data[2][0], Type(0), -data[0][0], -data[1][0], data[0][0], Type(0)};
 }
 }; // namespace tinyso3
