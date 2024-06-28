@@ -1,4 +1,6 @@
 #include <tinyso3/RotationMatrix.hpp>
+#include <tinyso3/AxisAngle.hpp>
+#include <tinyso3/Euler.hpp>
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_floating_point.hpp>
 
@@ -7,6 +9,21 @@ using namespace tinyso3;
 TEST_CASE("RotationMatrix") {
     SECTION("Constructors") {
         RotationMatrix<ACTIVE, float> m1{1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
+        Euler<ZYX, float> euler{0.0f, 0.2f, 0.0f};
+        AxisAngle<float> axis_angle{euler};
+
+        RotationMatrix<ACTIVE, float> m2{euler};
+        RotationMatrix<ACTIVE, float> m3{axis_angle};
+
+        REQUIRE(fabs(m1(0, 0) - 1.0f) < 1e-4f);
+        REQUIRE(fabs(m1(0, 1) - 0.0f) < 1e-4f);
+        REQUIRE(fabs(m1(0, 2) - 0.0f) < 1e-4f);
+        REQUIRE(fabs(m1(1, 0) - 0.0f) < 1e-4f);
+        REQUIRE(fabs(m1(1, 1) - 1.0f) < 1e-4f);
+        REQUIRE(fabs(m1(1, 2) - 0.0f) < 1e-4f);
+        REQUIRE(fabs(m1(2, 0) - 0.0f) < 1e-4f);
+        REQUIRE(fabs(m1(2, 1) - 0.0f) < 1e-4f);
+        REQUIRE(fabs(m1(2, 2) - 1.0f) < 1e-4f);
     }
 
     SECTION("SO3 Group Operations") {

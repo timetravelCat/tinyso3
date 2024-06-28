@@ -45,6 +45,9 @@ struct is_integral_constant_of_rotation_matrix_transform_convention;
 template<typename EulerSequence, typename Type>
 class Euler;
 
+template<typename Type>
+class AxisAngle;
+
 template<typename RotationMatrixTransformConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION,
          typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 class RotationMatrix : public SquareMatrix<3, Type> {
@@ -65,6 +68,8 @@ public:
 
     template<typename EulerSequence>
     RotationMatrix(const Euler<EulerSequence, Type>& euler);
+
+    RotationMatrix(const AxisAngle<Type>& axis_angle);
 
     /**
      * SO3 Group Operations
@@ -140,6 +145,21 @@ RotationMatrix<RotationMatrixTransformConvention, Type>::RotationMatrix(const Eu
         (*this) = RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis3>>(euler(2)) *
                   RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis2>>(euler(1)) *
                   RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis1>>(euler(0));
+    }
+}
+
+template<typename RotationMatrixTransformConvention, typename Type>
+RotationMatrix<RotationMatrixTransformConvention, Type>::RotationMatrix(const AxisAngle<Type>& axis_angle) {
+    const Type angle = axis_angle.angle();
+    const Vector3<Type> axis = axis_angle.axis();
+
+    const Type cos_angle = ::cos(angle);
+    const Type sin_angle = ::sin(angle);
+
+    if(is_same<RotationMatrixTransformConvention, ACTIVE>::value) {
+        (*this) = cos_angle * Identity() + (Type(1) - cos_angle) * (axis * axis.T()) + sin_angle * axis.hat();
+    } else if(is_same<RotationMatrixTransformConvention, PASSIVE>::value) {
+        (*this) = cos_angle * Identity() + (Type(1) - cos_angle) * (axis * axis.T()) - sin_angle * axis.hat();
     }
 }
 

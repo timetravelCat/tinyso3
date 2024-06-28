@@ -67,6 +67,9 @@ using ZYZ = EulerSequence<Z::value, Y::value, Z::value>;
 template<typename T>
 struct is_euler_sequence;
 
+template<typename Type>
+class AxisAngle;
+
 template<typename EulerSequence = TINYSO3_DEFAULT_EULER_ANGLE_SEQUENCE, typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 class Euler : public Vector3<Type> {
     static_assert(is_euler_sequence<EulerSequence>::value, "EulerSequence must be one of the EulerSequence types.");
@@ -84,6 +87,8 @@ public:
 
     template<typename Convention>
     Euler(const RotationMatrix<Convention, Type>& dcm);
+
+    Euler(const AxisAngle<Type>& axis_angle);
 };
 
 template<typename EulerSequence, typename Type>
@@ -151,6 +156,10 @@ Euler<EulerSequence, Type>::Euler(const RotationMatrix<Convention, Type>& dcm) {
         }
     }
 };
+
+template<typename EulerSequence, typename Type>
+Euler<EulerSequence, Type>::Euler(const AxisAngle<Type>& axis_angle) :
+Euler(RotationMatrix<ACTIVE, Type>{axis_angle}){};
 
 template<typename T>
 struct is_euler_sequence : false_type {};
