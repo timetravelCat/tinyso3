@@ -7,8 +7,8 @@ using namespace tinyso3;
 
 TEST_CASE("EulerRate") {
     AngularVelocity<float> angular_velocity{0.4f, 0.5f, 0.6f};
-    Euler<XYZ, float> euler{0.1f, 0.2f, 0.3f};
-    EulerRate<XYZ, float> euler_rate{RotationMatrix<PASSIVE, float>{euler}, angular_velocity};
+    Euler<INTRINSIC, XYZ, float> euler{0.1f, 0.2f, 0.3f};
+    EulerRate<INTRINSIC, XYZ, float> euler_rate{RotationMatrix<PASSIVE, float>{euler}, angular_velocity};
 
     SquareMatrix<3, float> AngularVelocityToEulerRate{
       ::cos(euler(2)) / ::cos(euler(1)),

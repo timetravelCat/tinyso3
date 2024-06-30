@@ -36,8 +36,8 @@ public:
 
     template<typename Convention>
     AxisAngle(const RotationMatrix<Convention, Type>& dcm);
-    template<typename EulerSequence>
-    AxisAngle(const Euler<EulerSequence, Type>& euler);
+    template<typename EulerConvention, typename EulerSequence>
+    AxisAngle(const Euler<EulerConvention, EulerSequence, Type>& euler);
     AxisAngle(const Vector3<Type>& axis_angle);
     AxisAngle(const Vector3<Type>& axis, const Type& angle);
 
@@ -75,8 +75,8 @@ AxisAngle<Type>::AxisAngle(const RotationMatrix<Convention, Type>& dcm) {
 };
 
 template<typename Type>
-template<typename EulerSequence>
-AxisAngle<Type>::AxisAngle(const Euler<EulerSequence, Type>& euler) :
+template<typename EulerConvention, typename EulerSequence>
+AxisAngle<Type>::AxisAngle(const Euler<EulerConvention, EulerSequence, Type>& euler) :
 AxisAngle(RotationMatrix<ACTIVE, Type>{euler}){};
 
 template<typename Type>

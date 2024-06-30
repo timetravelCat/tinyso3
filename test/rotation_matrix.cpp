@@ -8,8 +8,19 @@ using namespace tinyso3;
 
 TEST_CASE("RotationMatrix") {
     SECTION("Constructors") {
+        RotationMatrix<ACTIVE, float> m0{};
+        REQUIRE(m0(0, 0) == 1.0f);
+        REQUIRE(m0(0, 1) == 0.0f);
+        REQUIRE(m0(0, 2) == 0.0f);
+        REQUIRE(m0(1, 0) == 0.0f);
+        REQUIRE(m0(1, 1) == 1.0f);
+        REQUIRE(m0(1, 2) == 0.0f);
+        REQUIRE(m0(2, 0) == 0.0f);
+        REQUIRE(m0(2, 1) == 0.0f);
+        REQUIRE(m0(2, 2) == 1.0f);
+
         RotationMatrix<ACTIVE, float> m1{1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-        Euler<ZYX, float> euler{0.0f, 0.2f, 0.0f};
+        Euler<INTRINSIC, ZYX, float> euler{0.0f, 0.2f, 0.0f};
         AxisAngle<float> axis_angle{euler};
 
         RotationMatrix<ACTIVE, float> m2{euler};

@@ -8,24 +8,24 @@ using namespace tinyso3;
 TEST_CASE("Euler") {
     // Axis Angle to Euler Angle
     AxisAngle<float> axis_angle{0.0f, 0.2f, 0.0f};
-    Euler<ZYX, float> euler{axis_angle};
+    Euler<INTRINSIC, ZYX, float> euler{axis_angle};
     REQUIRE(fabs(euler(0) - 0.0f) < 1e-4f);
     REQUIRE(fabs(euler(1) - 0.2f) < 1e-4f);
     REQUIRE(fabs(euler(2) - 0.0f) < 1e-4f);
 
     // Create Euler Angle of All Sequences
-    Euler<XYZ, float> euler_xyz(0.1f, 0.2f, 0.3f);
-    Euler<XZY, float> euler_xzy(0.1f, 0.2f, 0.3f);
-    Euler<YXZ, float> euler_yxz(0.1f, 0.2f, 0.3f);
-    Euler<YZX, float> euler_yzx(0.1f, 0.2f, 0.3f);
-    Euler<ZXY, float> euler_zxy(0.1f, 0.2f, 0.3f);
-    Euler<ZYX, float> euler_zyx(0.1f, 0.2f, 0.3f);
-    Euler<XYX, float> euler_xyx(0.1f, 0.2f, 0.3f);
-    Euler<XZX, float> euler_xzx(0.1f, 0.2f, 0.3f);
-    Euler<YXY, float> euler_yxy(0.1f, 0.2f, 0.3f);
-    Euler<YZY, float> euler_yzy(0.1f, 0.2f, 0.3f);
-    Euler<ZXZ, float> euler_zxz(0.1f, 0.2f, 0.3f);
-    Euler<ZYZ, float> euler_zyz(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, XYZ, float> euler_xyz(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, XZY, float> euler_xzy(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, YXZ, float> euler_yxz(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, YZX, float> euler_yzx(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, ZXY, float> euler_zxy(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, ZYX, float> euler_zyx(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, XYX, float> euler_xyx(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, XZX, float> euler_xzx(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, YXY, float> euler_yxy(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, YZY, float> euler_yzy(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, ZXZ, float> euler_zxz(0.1f, 0.2f, 0.3f);
+    Euler<INTRINSIC, ZYZ, float> euler_zyz(0.1f, 0.2f, 0.3f);
 
     // Then Convert to Rotation Matrix
     RotationMatrix<ACTIVE, float> dcm_active_xyz(euler_xyz);
@@ -55,31 +55,31 @@ TEST_CASE("Euler") {
     RotationMatrix<PASSIVE, float> dcm_passive_zyz(euler_zyz);
 
     // Then Convert to Euler Angle Again
-    Euler<XYZ, float> euler_xyz_active(dcm_active_xyz);
-    Euler<XZY, float> euler_xzy_active(dcm_active_xzy);
-    Euler<YXZ, float> euler_yxz_active(dcm_active_yxz);
-    Euler<YZX, float> euler_yzx_active(dcm_active_yzx);
-    Euler<ZXY, float> euler_zxy_active(dcm_active_zxy);
-    Euler<ZYX, float> euler_zyx_active(dcm_active_zyx);
-    Euler<XYX, float> euler_xyx_active(dcm_active_xyx);
-    Euler<XZX, float> euler_xzx_active(dcm_active_xzx);
-    Euler<YXY, float> euler_yxy_active(dcm_active_yxy);
-    Euler<YZY, float> euler_yzy_active(dcm_active_yzy);
-    Euler<ZXZ, float> euler_zxz_active(dcm_active_zxz);
-    Euler<ZYZ, float> euler_zyz_active(dcm_active_zyz);
+    Euler<INTRINSIC, XYZ, float> euler_xyz_active(dcm_active_xyz);
+    Euler<INTRINSIC, XZY, float> euler_xzy_active(dcm_active_xzy);
+    Euler<INTRINSIC, YXZ, float> euler_yxz_active(dcm_active_yxz);
+    Euler<INTRINSIC, YZX, float> euler_yzx_active(dcm_active_yzx);
+    Euler<INTRINSIC, ZXY, float> euler_zxy_active(dcm_active_zxy);
+    Euler<INTRINSIC, ZYX, float> euler_zyx_active(dcm_active_zyx);
+    Euler<INTRINSIC, XYX, float> euler_xyx_active(dcm_active_xyx);
+    Euler<INTRINSIC, XZX, float> euler_xzx_active(dcm_active_xzx);
+    Euler<INTRINSIC, YXY, float> euler_yxy_active(dcm_active_yxy);
+    Euler<INTRINSIC, YZY, float> euler_yzy_active(dcm_active_yzy);
+    Euler<INTRINSIC, ZXZ, float> euler_zxz_active(dcm_active_zxz);
+    Euler<INTRINSIC, ZYZ, float> euler_zyz_active(dcm_active_zyz);
 
-    Euler<XYZ, float> euler_xyz_passive(dcm_passive_xyz);
-    Euler<XZY, float> euler_xzy_passive(dcm_passive_xzy);
-    Euler<YXZ, float> euler_yxz_passive(dcm_passive_yxz);
-    Euler<YZX, float> euler_yzx_passive(dcm_passive_yzx);
-    Euler<ZXY, float> euler_zxy_passive(dcm_passive_zxy);
-    Euler<ZYX, float> euler_zyx_passive(dcm_passive_zyx);
-    Euler<XYX, float> euler_xyx_passive(dcm_passive_xyx);
-    Euler<XZX, float> euler_xzx_passive(dcm_passive_xzx);
-    Euler<YXY, float> euler_yxy_passive(dcm_passive_yxy);
-    Euler<YZY, float> euler_yzy_passive(dcm_passive_yzy);
-    Euler<ZXZ, float> euler_zxz_passive(dcm_passive_zxz);
-    Euler<ZYZ, float> euler_zyz_passive(dcm_passive_zyz);
+    Euler<INTRINSIC, XYZ, float> euler_xyz_passive(dcm_passive_xyz);
+    Euler<INTRINSIC, XZY, float> euler_xzy_passive(dcm_passive_xzy);
+    Euler<INTRINSIC, YXZ, float> euler_yxz_passive(dcm_passive_yxz);
+    Euler<INTRINSIC, YZX, float> euler_yzx_passive(dcm_passive_yzx);
+    Euler<INTRINSIC, ZXY, float> euler_zxy_passive(dcm_passive_zxy);
+    Euler<INTRINSIC, ZYX, float> euler_zyx_passive(dcm_passive_zyx);
+    Euler<INTRINSIC, XYX, float> euler_xyx_passive(dcm_passive_xyx);
+    Euler<INTRINSIC, XZX, float> euler_xzx_passive(dcm_passive_xzx);
+    Euler<INTRINSIC, YXY, float> euler_yxy_passive(dcm_passive_yxy);
+    Euler<INTRINSIC, YZY, float> euler_yzy_passive(dcm_passive_yzy);
+    Euler<INTRINSIC, ZXZ, float> euler_zxz_passive(dcm_passive_zxz);
+    Euler<INTRINSIC, ZYZ, float> euler_zyz_passive(dcm_passive_zyz);
 
     // Then Compare the Result
     for(size_t i = 0; i < 3; i++) {
@@ -111,30 +111,30 @@ TEST_CASE("Euler") {
     }
 
     // Singular Cases
-    Euler<XYZ, float> euler_xyz_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
-    Euler<XYZ, float> euler_xyz_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
-    Euler<XZY, float> euler_xzy_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
-    Euler<XZY, float> euler_xzy_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
-    Euler<YXZ, float> euler_yxz_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
-    Euler<YXZ, float> euler_yxz_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
-    Euler<YZX, float> euler_yzx_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
-    Euler<YZX, float> euler_yzx_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
-    Euler<ZXY, float> euler_zxy_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
-    Euler<ZXY, float> euler_zxy_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
-    Euler<ZYX, float> euler_zyx_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
-    Euler<ZYX, float> euler_zyx_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
-    Euler<XYX, float> euler_xyx_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
-    Euler<XYX, float> euler_xyx_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
-    Euler<XZX, float> euler_xzx_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
-    Euler<XZX, float> euler_xzx_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
-    Euler<YXY, float> euler_yxy_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
-    Euler<YXY, float> euler_yxy_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
-    Euler<YZY, float> euler_yzy_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
-    Euler<YZY, float> euler_yzy_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
-    Euler<ZXZ, float> euler_zxz_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
-    Euler<ZXZ, float> euler_zxz_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
-    Euler<ZYZ, float> euler_zyz_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
-    Euler<ZYZ, float> euler_zyz_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
+    Euler<INTRINSIC, XYZ, float> euler_xyz_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, XYZ, float> euler_xyz_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, XZY, float> euler_xzy_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, XZY, float> euler_xzy_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, YXZ, float> euler_yxz_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, YXZ, float> euler_yxz_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, YZX, float> euler_yzx_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, YZX, float> euler_yzx_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, ZXY, float> euler_zxy_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, ZXY, float> euler_zxy_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, ZYX, float> euler_zyx_singular_p_pi_2(0.0f, +M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, ZYX, float> euler_zyx_singular_m_pi_2(0.0f, -M_PI_2f, M_PIf / 6.0f);
+    Euler<INTRINSIC, XYX, float> euler_xyx_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
+    Euler<INTRINSIC, XYX, float> euler_xyx_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
+    Euler<INTRINSIC, XZX, float> euler_xzx_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
+    Euler<INTRINSIC, XZX, float> euler_xzx_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
+    Euler<INTRINSIC, YXY, float> euler_yxy_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
+    Euler<INTRINSIC, YXY, float> euler_yxy_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
+    Euler<INTRINSIC, YZY, float> euler_yzy_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
+    Euler<INTRINSIC, YZY, float> euler_yzy_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
+    Euler<INTRINSIC, ZXZ, float> euler_zxz_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
+    Euler<INTRINSIC, ZXZ, float> euler_zxz_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
+    Euler<INTRINSIC, ZYZ, float> euler_zyz_singular_p_pi_0(0.0f, +0.0f, M_PIf / 6.0f);
+    Euler<INTRINSIC, ZYZ, float> euler_zyz_singular_p_pi_1(0.0f, M_PIf, M_PIf / 6.0f);
 
     RotationMatrix<ACTIVE, float> dcm_xyz_active_p_pi_2(euler_xyz_singular_p_pi_2);
     RotationMatrix<ACTIVE, float> dcm_xyz_active_m_pi_2(euler_xyz_singular_m_pi_2);
@@ -187,55 +187,55 @@ TEST_CASE("Euler") {
     RotationMatrix<PASSIVE, float> dcm_zyz_passive_p_pi_1(euler_zyz_singular_p_pi_1);
 
     // Then Convert to Euler Angle Again
-    Euler<XYZ, float> euler_xyz_singular_p_pi_2_active(dcm_xyz_active_p_pi_2);
-    Euler<XYZ, float> euler_xyz_singular_m_pi_2_active(dcm_xyz_active_m_pi_2);
-    Euler<XZY, float> euler_xzy_singular_p_pi_2_active(dcm_xzy_active_p_pi_2);
-    Euler<XZY, float> euler_xzy_singular_m_pi_2_active(dcm_xzy_active_m_pi_2);
-    Euler<YXZ, float> euler_yxz_singular_p_pi_2_active(dcm_yxz_active_p_pi_2);
-    Euler<YXZ, float> euler_yxz_singular_m_pi_2_active(dcm_yxz_active_m_pi_2);
-    Euler<YZX, float> euler_yzx_singular_p_pi_2_active(dcm_yzx_active_p_pi_2);
-    Euler<YZX, float> euler_yzx_singular_m_pi_2_active(dcm_yzx_active_m_pi_2);
-    Euler<ZXY, float> euler_zxy_singular_p_pi_2_active(dcm_zxy_active_p_pi_2);
-    Euler<ZXY, float> euler_zxy_singular_m_pi_2_active(dcm_zxy_active_m_pi_2);
-    Euler<ZYX, float> euler_zyx_singular_p_pi_2_active(dcm_zyx_active_p_pi_2);
-    Euler<ZYX, float> euler_zyx_singular_m_pi_2_active(dcm_zyx_active_m_pi_2);
-    Euler<XYX, float> euler_xyx_singular_p_pi_0_active(dcm_xyx_active_p_pi_0);
-    Euler<XYX, float> euler_xyx_singular_p_pi_1_active(dcm_xyx_active_p_pi_1);
-    Euler<XZX, float> euler_xzx_singular_p_pi_0_active(dcm_xzx_active_p_pi_0);
-    Euler<XZX, float> euler_xzx_singular_p_pi_1_active(dcm_xzx_active_p_pi_1);
-    Euler<YXY, float> euler_yxy_singular_p_pi_0_active(dcm_yxy_active_p_pi_0);
-    Euler<YXY, float> euler_yxy_singular_p_pi_1_active(dcm_yxy_active_p_pi_1);
-    Euler<YZY, float> euler_yzy_singular_p_pi_0_active(dcm_yzy_active_p_pi_0);
-    Euler<YZY, float> euler_yzy_singular_p_pi_1_active(dcm_yzy_active_p_pi_1);
-    Euler<ZXZ, float> euler_zxz_singular_p_pi_0_active(dcm_zxz_active_p_pi_0);
-    Euler<ZXZ, float> euler_zxz_singular_p_pi_1_active(dcm_zxz_active_p_pi_1);
-    Euler<ZYZ, float> euler_zyz_singular_p_pi_0_active(dcm_zyz_active_p_pi_0);
-    Euler<ZYZ, float> euler_zyz_singular_p_pi_1_active(dcm_zyz_active_p_pi_1);
+    Euler<INTRINSIC, XYZ, float> euler_xyz_singular_p_pi_2_active(dcm_xyz_active_p_pi_2);
+    Euler<INTRINSIC, XYZ, float> euler_xyz_singular_m_pi_2_active(dcm_xyz_active_m_pi_2);
+    Euler<INTRINSIC, XZY, float> euler_xzy_singular_p_pi_2_active(dcm_xzy_active_p_pi_2);
+    Euler<INTRINSIC, XZY, float> euler_xzy_singular_m_pi_2_active(dcm_xzy_active_m_pi_2);
+    Euler<INTRINSIC, YXZ, float> euler_yxz_singular_p_pi_2_active(dcm_yxz_active_p_pi_2);
+    Euler<INTRINSIC, YXZ, float> euler_yxz_singular_m_pi_2_active(dcm_yxz_active_m_pi_2);
+    Euler<INTRINSIC, YZX, float> euler_yzx_singular_p_pi_2_active(dcm_yzx_active_p_pi_2);
+    Euler<INTRINSIC, YZX, float> euler_yzx_singular_m_pi_2_active(dcm_yzx_active_m_pi_2);
+    Euler<INTRINSIC, ZXY, float> euler_zxy_singular_p_pi_2_active(dcm_zxy_active_p_pi_2);
+    Euler<INTRINSIC, ZXY, float> euler_zxy_singular_m_pi_2_active(dcm_zxy_active_m_pi_2);
+    Euler<INTRINSIC, ZYX, float> euler_zyx_singular_p_pi_2_active(dcm_zyx_active_p_pi_2);
+    Euler<INTRINSIC, ZYX, float> euler_zyx_singular_m_pi_2_active(dcm_zyx_active_m_pi_2);
+    Euler<INTRINSIC, XYX, float> euler_xyx_singular_p_pi_0_active(dcm_xyx_active_p_pi_0);
+    Euler<INTRINSIC, XYX, float> euler_xyx_singular_p_pi_1_active(dcm_xyx_active_p_pi_1);
+    Euler<INTRINSIC, XZX, float> euler_xzx_singular_p_pi_0_active(dcm_xzx_active_p_pi_0);
+    Euler<INTRINSIC, XZX, float> euler_xzx_singular_p_pi_1_active(dcm_xzx_active_p_pi_1);
+    Euler<INTRINSIC, YXY, float> euler_yxy_singular_p_pi_0_active(dcm_yxy_active_p_pi_0);
+    Euler<INTRINSIC, YXY, float> euler_yxy_singular_p_pi_1_active(dcm_yxy_active_p_pi_1);
+    Euler<INTRINSIC, YZY, float> euler_yzy_singular_p_pi_0_active(dcm_yzy_active_p_pi_0);
+    Euler<INTRINSIC, YZY, float> euler_yzy_singular_p_pi_1_active(dcm_yzy_active_p_pi_1);
+    Euler<INTRINSIC, ZXZ, float> euler_zxz_singular_p_pi_0_active(dcm_zxz_active_p_pi_0);
+    Euler<INTRINSIC, ZXZ, float> euler_zxz_singular_p_pi_1_active(dcm_zxz_active_p_pi_1);
+    Euler<INTRINSIC, ZYZ, float> euler_zyz_singular_p_pi_0_active(dcm_zyz_active_p_pi_0);
+    Euler<INTRINSIC, ZYZ, float> euler_zyz_singular_p_pi_1_active(dcm_zyz_active_p_pi_1);
 
-    Euler<XYZ, float> euler_xyz_singular_p_pi_2_passive(dcm_xyz_passive_p_pi_2);
-    Euler<XYZ, float> euler_xyz_singular_m_pi_2_passive(dcm_xyz_passive_m_pi_2);
-    Euler<XZY, float> euler_xzy_singular_p_pi_2_passive(dcm_xzy_passive_p_pi_2);
-    Euler<XZY, float> euler_xzy_singular_m_pi_2_passive(dcm_xzy_passive_m_pi_2);
-    Euler<YXZ, float> euler_yxz_singular_p_pi_2_passive(dcm_yxz_passive_p_pi_2);
-    Euler<YXZ, float> euler_yxz_singular_m_pi_2_passive(dcm_yxz_passive_m_pi_2);
-    Euler<YZX, float> euler_yzx_singular_p_pi_2_passive(dcm_yzx_passive_p_pi_2);
-    Euler<YZX, float> euler_yzx_singular_m_pi_2_passive(dcm_yzx_passive_m_pi_2);
-    Euler<ZXY, float> euler_zxy_singular_p_pi_2_passive(dcm_zxy_passive_p_pi_2);
-    Euler<ZXY, float> euler_zxy_singular_m_pi_2_passive(dcm_zxy_passive_m_pi_2);
-    Euler<ZYX, float> euler_zyx_singular_p_pi_2_passive(dcm_zyx_passive_p_pi_2);
-    Euler<ZYX, float> euler_zyx_singular_m_pi_2_passive(dcm_zyx_passive_m_pi_2);
-    Euler<XYX, float> euler_xyx_singular_p_pi_0_passive(dcm_xyx_passive_p_pi_0);
-    Euler<XYX, float> euler_xyx_singular_p_pi_1_passive(dcm_xyx_passive_p_pi_1);
-    Euler<XZX, float> euler_xzx_singular_p_pi_0_passive(dcm_xzx_passive_p_pi_0);
-    Euler<XZX, float> euler_xzx_singular_p_pi_1_passive(dcm_xzx_passive_p_pi_1);
-    Euler<YXY, float> euler_yxy_singular_p_pi_0_passive(dcm_yxy_passive_p_pi_0);
-    Euler<YXY, float> euler_yxy_singular_p_pi_1_passive(dcm_yxy_passive_p_pi_1);
-    Euler<YZY, float> euler_yzy_singular_p_pi_0_passive(dcm_yzy_passive_p_pi_0);
-    Euler<YZY, float> euler_yzy_singular_p_pi_1_passive(dcm_yzy_passive_p_pi_1);
-    Euler<ZXZ, float> euler_zxz_singular_p_pi_0_passive(dcm_zxz_passive_p_pi_0);
-    Euler<ZXZ, float> euler_zxz_singular_p_pi_1_passive(dcm_zxz_passive_p_pi_1);
-    Euler<ZYZ, float> euler_zyz_singular_p_pi_0_passive(dcm_zyz_passive_p_pi_0);
-    Euler<ZYZ, float> euler_zyz_singular_p_pi_1_passive(dcm_zyz_passive_p_pi_1);
+    Euler<INTRINSIC, XYZ, float> euler_xyz_singular_p_pi_2_passive(dcm_xyz_passive_p_pi_2);
+    Euler<INTRINSIC, XYZ, float> euler_xyz_singular_m_pi_2_passive(dcm_xyz_passive_m_pi_2);
+    Euler<INTRINSIC, XZY, float> euler_xzy_singular_p_pi_2_passive(dcm_xzy_passive_p_pi_2);
+    Euler<INTRINSIC, XZY, float> euler_xzy_singular_m_pi_2_passive(dcm_xzy_passive_m_pi_2);
+    Euler<INTRINSIC, YXZ, float> euler_yxz_singular_p_pi_2_passive(dcm_yxz_passive_p_pi_2);
+    Euler<INTRINSIC, YXZ, float> euler_yxz_singular_m_pi_2_passive(dcm_yxz_passive_m_pi_2);
+    Euler<INTRINSIC, YZX, float> euler_yzx_singular_p_pi_2_passive(dcm_yzx_passive_p_pi_2);
+    Euler<INTRINSIC, YZX, float> euler_yzx_singular_m_pi_2_passive(dcm_yzx_passive_m_pi_2);
+    Euler<INTRINSIC, ZXY, float> euler_zxy_singular_p_pi_2_passive(dcm_zxy_passive_p_pi_2);
+    Euler<INTRINSIC, ZXY, float> euler_zxy_singular_m_pi_2_passive(dcm_zxy_passive_m_pi_2);
+    Euler<INTRINSIC, ZYX, float> euler_zyx_singular_p_pi_2_passive(dcm_zyx_passive_p_pi_2);
+    Euler<INTRINSIC, ZYX, float> euler_zyx_singular_m_pi_2_passive(dcm_zyx_passive_m_pi_2);
+    Euler<INTRINSIC, XYX, float> euler_xyx_singular_p_pi_0_passive(dcm_xyx_passive_p_pi_0);
+    Euler<INTRINSIC, XYX, float> euler_xyx_singular_p_pi_1_passive(dcm_xyx_passive_p_pi_1);
+    Euler<INTRINSIC, XZX, float> euler_xzx_singular_p_pi_0_passive(dcm_xzx_passive_p_pi_0);
+    Euler<INTRINSIC, XZX, float> euler_xzx_singular_p_pi_1_passive(dcm_xzx_passive_p_pi_1);
+    Euler<INTRINSIC, YXY, float> euler_yxy_singular_p_pi_0_passive(dcm_yxy_passive_p_pi_0);
+    Euler<INTRINSIC, YXY, float> euler_yxy_singular_p_pi_1_passive(dcm_yxy_passive_p_pi_1);
+    Euler<INTRINSIC, YZY, float> euler_yzy_singular_p_pi_0_passive(dcm_yzy_passive_p_pi_0);
+    Euler<INTRINSIC, YZY, float> euler_yzy_singular_p_pi_1_passive(dcm_yzy_passive_p_pi_1);
+    Euler<INTRINSIC, ZXZ, float> euler_zxz_singular_p_pi_0_passive(dcm_zxz_passive_p_pi_0);
+    Euler<INTRINSIC, ZXZ, float> euler_zxz_singular_p_pi_1_passive(dcm_zxz_passive_p_pi_1);
+    Euler<INTRINSIC, ZYZ, float> euler_zyz_singular_p_pi_0_passive(dcm_zyz_passive_p_pi_0);
+    Euler<INTRINSIC, ZYZ, float> euler_zyz_singular_p_pi_1_passive(dcm_zyz_passive_p_pi_1);
 
     // Then Compare the Result
     for(size_t i = 0; i < 3; i++) {

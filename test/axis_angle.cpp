@@ -6,7 +6,7 @@ using namespace tinyso3;
 
 TEST_CASE("AxisAngle") {
     SECTION("Constructors") {
-        Euler<ZYX, float> euler{0.0f, 0.2f, 0.0f};
+        Euler<INTRINSIC, ZYX, float> euler{0.0f, 0.2f, 0.0f};
         RotationMatrix<ACTIVE, float> dcm_active{euler};
         RotationMatrix<PASSIVE, float> dcm_passive{euler};
 

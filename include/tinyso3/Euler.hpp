@@ -3,6 +3,13 @@
  * 
  * A template based minimal euler angle representations.
  * 
+ * Euler angles are a way to describe the orientation of a rigid body in three-dimensional space. 
+ * They are defined by three successive rotations around different axes. 
+ * There are two main types of Euler angles: extrinsic and intrinsic.
+ * 
+ * Extrinsic Euler angles describe rotations about the axes of a fixed coordinate system (global frame).
+ * Intrinsic Euler angles describe rotations about the axes of a moving coordinate system (body frame).
+ * 
  * There are 12 possible representations of Euler angles, which are divided into two groups:
  * - Tait-Bryan angles: The first and third angles are in the range [-pi, pi], and the second angle is in the range [-pi/2, pi/2].
  * - Proper Euler angles: The first and third angles are in the range [-pi, pi], and the second angle is in the range [0, pi].
@@ -24,8 +31,12 @@
  * - ZYZ: Rotate by Y, then Z, then Y.
  * 
  * Sequence means the order of rotations.
- * For ACTIVE(ALIBI) rotation, ZYX Sequence rotation matrix is, Rz*Ry*Rx.
- * However, for PASSIVE(ALIAS), ZYX Sequence rotation matrix is, Rx*Ry*Rz.
+ * 
+ * ACTIVE(ALIBI) rotation, Intrinsic euler, ZYX Sequence rotation matrix is, Rz*Ry*Rx.
+ * PASSIVE(ALIAS) rotation, Intrinsic euler, ZYX Sequence rotation matrix is, Rx*Ry*Rz.
+ * ACTIVE(ALIBI) rotation, Extrinsic euler, ZYX Sequence rotation matrix is, Rx*Ry*Rz.
+ * PASSIVE(ALIAS) rotation, Extrinsic euler, ZYX Sequence rotation matrix is, Rz*Ry*Rx.
+ * 
  * Be careful about PASSIVE / ACTIVE rotation. 
  * PASSIVE principal rotation matrix is transpose of ACTIVE principal rotation matrix.
  * 
@@ -44,40 +55,20 @@
 #include "RotationMatrix.hpp"
 
 namespace tinyso3 {
-template<PrincipalAxis _Axis1, PrincipalAxis _Axis2, PrincipalAxis _Axis3>
-struct EulerSequence {
-    static constexpr PrincipalAxis Axis1 = _Axis1;
-    static constexpr PrincipalAxis Axis2 = _Axis2;
-    static constexpr PrincipalAxis Axis3 = _Axis3;
-};
-
-using XYZ = EulerSequence<X::value, Y::value, Z::value>;
-using XZY = EulerSequence<X::value, Z::value, Y::value>;
-using YXZ = EulerSequence<Y::value, X::value, Z::value>;
-using YZX = EulerSequence<Y::value, Z::value, X::value>;
-using ZXY = EulerSequence<Z::value, X::value, Y::value>;
-using ZYX = EulerSequence<Z::value, Y::value, X::value>;
-using XYX = EulerSequence<X::value, Y::value, X::value>;
-using XZX = EulerSequence<X::value, Z::value, X::value>;
-using YXY = EulerSequence<Y::value, X::value, Y::value>;
-using YZY = EulerSequence<Y::value, Z::value, Y::value>;
-using ZXZ = EulerSequence<Z::value, X::value, Z::value>;
-using ZYZ = EulerSequence<Z::value, Y::value, Z::value>;
-
-template<typename T>
-struct is_euler_sequence;
-
 template<typename Type>
 class AxisAngle;
 
-template<typename EulerSequence = TINYSO3_DEFAULT_EULER_ANGLE_SEQUENCE, typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
+template<typename EulerConvention = TINYSO3_DEFAULT_EULER_ANGLE_CONVENTION, typename EulerSequence = TINYSO3_DEFAULT_EULER_ANGLE_SEQUENCE, typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 class Euler : public Vector3<Type> {
+    static_assert(is_euler_convention<EulerConvention>::value, "EulerConvention must be one of the EulerConvention types.");
     static_assert(is_euler_sequence<EulerSequence>::value, "EulerSequence must be one of the EulerSequence types.");
 
 protected:
     using Vector3<Type>::data;
 
 public:
+    using Convention = EulerConvention;
+
     /**
      * Constructors
      */
@@ -85,26 +76,29 @@ public:
 
     Euler(const Euler& other);
 
-    template<typename Convention>
-    Euler(const RotationMatrix<Convention, Type>& dcm);
+    template<typename RotationMatrixConvention>
+    Euler(const RotationMatrix<RotationMatrixConvention, Type>& dcm);
 
     Euler(const AxisAngle<Type>& axis_angle);
 };
 
-template<typename EulerSequence, typename Type>
-Euler<EulerSequence, Type>::Euler(const Euler& other) :
+template<typename EulerConvention, typename EulerSequence, typename Type>
+Euler<EulerConvention, EulerSequence, Type>::Euler(const Euler& other) :
 Vector3<Type>(other){};
 
-template<typename EulerSequence, typename Type>
-template<typename Convention>
-Euler<EulerSequence, Type>::Euler(const RotationMatrix<Convention, Type>& dcm) {
+template<typename EulerConvention, typename EulerSequence, typename Type>
+template<typename RotationMatrixConvention>
+Euler<EulerConvention, EulerSequence, Type>::Euler(const RotationMatrix<RotationMatrixConvention, Type>& dcm) {
     constexpr int AXIS_FIRST = static_cast<int>(EulerSequence::Axis1);
     constexpr int AXIS_SECOND = static_cast<int>(EulerSequence::Axis2);
     constexpr int AXIS_THIRD = static_cast<int>(EulerSequence::Axis3);
     constexpr int AXIS_LEFT = 3 - AXIS_FIRST - AXIS_SECOND;
     constexpr Type SIGN = (((AXIS_SECOND - AXIS_FIRST) == 1) || ((AXIS_SECOND - AXIS_FIRST) == -2)) ? Type(1) : Type(-1);
 
-    if(is_same<Convention, ACTIVE>::value) {
+    constexpr bool IS_DEFAULT_SEQUENCE = (is_same<EulerConvention, INTRINSIC>::value && is_same<RotationMatrixConvention, ACTIVE>::value) ||
+                                         (is_same<EulerConvention, EXTRINSIC>::value && is_same<RotationMatrixConvention, PASSIVE>::value);
+
+    if(IS_DEFAULT_SEQUENCE) {
         if(AXIS_FIRST == AXIS_THIRD) { // Proper Euler angles
             data[2][0] = ::atan2(dcm(AXIS_FIRST, AXIS_SECOND), SIGN * dcm(AXIS_FIRST, AXIS_LEFT));
             data[1][0] = ::acos(dcm(AXIS_FIRST, AXIS_FIRST));
@@ -114,7 +108,7 @@ Euler<EulerSequence, Type>::Euler(const RotationMatrix<Convention, Type>& dcm) {
             data[1][0] = SIGN * ::asin(dcm(AXIS_FIRST, AXIS_THIRD));
             data[0][0] = ::atan2(-SIGN * dcm(AXIS_SECOND, AXIS_THIRD), dcm(AXIS_THIRD, AXIS_THIRD));
         }
-    } else if(is_same<Convention, PASSIVE>::value) {
+    } else {
         if(AXIS_FIRST == AXIS_THIRD) { // Proper Euler angles
             data[2][0] = ::atan2(dcm(AXIS_SECOND, AXIS_FIRST), SIGN * dcm(AXIS_LEFT, AXIS_FIRST));
             data[1][0] = ::acos(dcm(AXIS_FIRST, AXIS_FIRST));
@@ -132,59 +126,32 @@ Euler<EulerSequence, Type>::Euler(const RotationMatrix<Convention, Type>& dcm) {
     if(AXIS_FIRST == AXIS_THIRD) { // Proper Euler angles
         if(::fabs(data[1][0]) < epsilon<Type>()) {
             data[0][0] = Type(0);
-            data[2][0] = is_same<Convention, ACTIVE>::value ?
+            data[2][0] = IS_DEFAULT_SEQUENCE ?
                            ::atan2(-SIGN * dcm(AXIS_SECOND, AXIS_LEFT), dcm(AXIS_SECOND, AXIS_SECOND)) :
                            ::atan2(-SIGN * dcm(AXIS_LEFT, AXIS_SECOND), dcm(AXIS_SECOND, AXIS_SECOND));
 
         } else if(::fabs(data[1][0] - Type(M_PI)) < epsilon<Type>()) {
             data[0][0] = Type(0);
-            data[2][0] = is_same<Convention, ACTIVE>::value ?
+            data[2][0] = IS_DEFAULT_SEQUENCE ?
                            ::atan2(-SIGN * dcm(AXIS_SECOND, AXIS_LEFT), dcm(AXIS_SECOND, AXIS_SECOND)) :
                            ::atan2(-SIGN * dcm(AXIS_LEFT, AXIS_SECOND), dcm(AXIS_SECOND, AXIS_SECOND));
         }
     } else { // Tait-Bryan angles
         if(::fabs(data[1][0] - Type(M_PI_2)) < epsilon<Type>()) {
             data[0][0] = Type(0);
-            data[2][0] = is_same<Convention, ACTIVE>::value ?
+            data[2][0] = IS_DEFAULT_SEQUENCE ?
                            ::atan2(dcm(AXIS_THIRD, AXIS_SECOND), -SIGN * dcm(AXIS_THIRD, AXIS_FIRST)) :
                            ::atan2(dcm(AXIS_SECOND, AXIS_THIRD), -SIGN * dcm(AXIS_FIRST, AXIS_THIRD));
         } else if(::fabs(data[1][0] + Type(M_PI_2)) < epsilon<Type>()) {
             data[0][0] = Type(0);
-            data[2][0] = is_same<Convention, ACTIVE>::value ?
+            data[2][0] = IS_DEFAULT_SEQUENCE ?
                            ::atan2(-dcm(AXIS_THIRD, AXIS_SECOND), SIGN * dcm(AXIS_THIRD, AXIS_FIRST)) :
                            ::atan2(-dcm(AXIS_SECOND, AXIS_THIRD), SIGN * dcm(AXIS_FIRST, AXIS_THIRD));
         }
     }
 };
 
-template<typename EulerSequence, typename Type>
-Euler<EulerSequence, Type>::Euler(const AxisAngle<Type>& axis_angle) :
+template<typename EulerConvention, typename EulerSequence, typename Type>
+Euler<EulerConvention, EulerSequence, Type>::Euler(const AxisAngle<Type>& axis_angle) :
 Euler(RotationMatrix<ACTIVE, Type>{axis_angle}){};
-
-template<typename T>
-struct is_euler_sequence : false_type {};
-template<>
-struct is_euler_sequence<EulerSequence<X::value, Y::value, Z::value>> : true_type {};
-template<>
-struct is_euler_sequence<EulerSequence<X::value, Z::value, Y::value>> : true_type {};
-template<>
-struct is_euler_sequence<EulerSequence<Y::value, X::value, Z::value>> : true_type {};
-template<>
-struct is_euler_sequence<EulerSequence<Y::value, Z::value, X::value>> : true_type {};
-template<>
-struct is_euler_sequence<EulerSequence<Z::value, X::value, Y::value>> : true_type {};
-template<>
-struct is_euler_sequence<EulerSequence<Z::value, Y::value, X::value>> : true_type {};
-template<>
-struct is_euler_sequence<EulerSequence<X::value, Y::value, X::value>> : true_type {};
-template<>
-struct is_euler_sequence<EulerSequence<X::value, Z::value, X::value>> : true_type {};
-template<>
-struct is_euler_sequence<EulerSequence<Y::value, X::value, Y::value>> : true_type {};
-template<>
-struct is_euler_sequence<EulerSequence<Y::value, Z::value, Y::value>> : true_type {};
-template<>
-struct is_euler_sequence<EulerSequence<Z::value, X::value, Z::value>> : true_type {};
-template<>
-struct is_euler_sequence<EulerSequence<Z::value, Y::value, Z::value>> : true_type {};
 } // namespace tinyso3

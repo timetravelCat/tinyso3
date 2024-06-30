@@ -8,8 +8,8 @@ using namespace tinyso3;
 #include <stdio.h>
 
 TEST_CASE("AngularVelocity") {
-    Euler<XYZ, float> euler{0.1f, 0.2f, 0.3f};
-    EulerRate<XYZ, float> euler_rate{0.4f, 0.5f, 0.6f};
+    Euler<INTRINSIC, XYZ, float> euler{0.1f, 0.2f, 0.3f};
+    EulerRate<INTRINSIC, XYZ, float> euler_rate{0.4f, 0.5f, 0.6f};
     AngularVelocity<float> angular_velocity{euler, euler_rate};
 
     SquareMatrix<3, float> EulerRateToAngularVelocity{
