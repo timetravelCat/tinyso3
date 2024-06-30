@@ -29,18 +29,18 @@ using Y = integral_constant<PrincipalAxis, PrincipalAxis::Y>;
 using Z = integral_constant<PrincipalAxis, PrincipalAxis::Z>;
 
 template<typename T>
-struct is_integral_constant_of_principal_rotation_axis;
+struct is_principal_axis;
 
-enum class RotationMatrixTransformConvention {
+enum class RotationMatrixConvention {
     ACTIVE,
     PASSIVE
 };
 
-using ACTIVE = integral_constant<RotationMatrixTransformConvention, RotationMatrixTransformConvention::ACTIVE>;
-using PASSIVE = integral_constant<RotationMatrixTransformConvention, RotationMatrixTransformConvention::PASSIVE>;
+using ACTIVE = integral_constant<RotationMatrixConvention, RotationMatrixConvention::ACTIVE>;
+using PASSIVE = integral_constant<RotationMatrixConvention, RotationMatrixConvention::PASSIVE>;
 
 template<typename T>
-struct is_integral_constant_of_rotation_matrix_transform_convention;
+struct is_rotation_matrix_convention;
 
 template<typename EulerSequence, typename Type>
 class Euler;
@@ -48,16 +48,16 @@ class Euler;
 template<typename Type>
 class AxisAngle;
 
-template<typename RotationMatrixTransformConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION,
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION,
          typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 class RotationMatrix : public SquareMatrix<3, Type> {
 protected:
-    static_assert(is_integral_constant_of_rotation_matrix_transform_convention<RotationMatrixTransformConvention>::value,
-                  "RotationMatrixTransformConvention must be PASSIVE(ALIAS) or ACTIVE(ALIBI).");
+    static_assert(is_rotation_matrix_convention<RotationMatrixConvention>::value,
+                  "RotationMatrixConvention must be PASSIVE(ALIAS) or ACTIVE(ALIBI).");
     using SquareMatrix<3, Type>::data;
 
 public:
-    using Convention = RotationMatrixTransformConvention;
+    using Convention = RotationMatrixConvention;
 
     /**
      * Constructors
@@ -89,7 +89,7 @@ public:
     /**
      * Principal Rotations
      */
-    template<typename Axis, enable_if_t<(is_integral_constant_of_principal_rotation_axis<Axis>::value), int> = 0>
+    template<typename Axis, enable_if_t<(is_principal_axis<Axis>::value), int> = 0>
     static RotationMatrix RotatePrincipalAxis(const Type& angle);
 
     /**
@@ -129,44 +129,44 @@ public:
     using SquareMatrix<3, Type>::Null;
 };
 
-template<typename RotationMatrixTransformConvention, typename Type>
-RotationMatrix<RotationMatrixTransformConvention, Type>::RotationMatrix(const SquareMatrix<3, Type>& other) :
+template<typename RotationMatrixConvention, typename Type>
+RotationMatrix<RotationMatrixConvention, Type>::RotationMatrix(const SquareMatrix<3, Type>& other) :
 SquareMatrix<3, Type>(other) {
 }
 
-template<typename RotationMatrixTransformConvention, typename Type>
+template<typename RotationMatrixConvention, typename Type>
 template<typename EulerSequence>
-RotationMatrix<RotationMatrixTransformConvention, Type>::RotationMatrix(const Euler<EulerSequence, Type>& euler) {
-    if(is_same<RotationMatrixTransformConvention, ACTIVE>::value) {
+RotationMatrix<RotationMatrixConvention, Type>::RotationMatrix(const Euler<EulerSequence, Type>& euler) {
+    if(is_same<RotationMatrixConvention, ACTIVE>::value) {
         (*this) = RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis1>>(euler(0)) *
                   RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis2>>(euler(1)) *
                   RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis3>>(euler(2));
-    } else if(is_same<RotationMatrixTransformConvention, PASSIVE>::value) {
+    } else if(is_same<RotationMatrixConvention, PASSIVE>::value) {
         (*this) = RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis3>>(euler(2)) *
                   RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis2>>(euler(1)) *
                   RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis1>>(euler(0));
     }
 }
 
-template<typename RotationMatrixTransformConvention, typename Type>
-RotationMatrix<RotationMatrixTransformConvention, Type>::RotationMatrix(const AxisAngle<Type>& axis_angle) {
+template<typename RotationMatrixConvention, typename Type>
+RotationMatrix<RotationMatrixConvention, Type>::RotationMatrix(const AxisAngle<Type>& axis_angle) {
     const Type angle = axis_angle.angle();
     const Vector3<Type> axis = axis_angle.axis();
 
     const Type cos_angle = ::cos(angle);
     const Type sin_angle = ::sin(angle);
 
-    if(is_same<RotationMatrixTransformConvention, ACTIVE>::value) {
+    if(is_same<RotationMatrixConvention, ACTIVE>::value) {
         (*this) = cos_angle * Identity() + (Type(1) - cos_angle) * (axis * axis.T()) + sin_angle * axis.hat();
-    } else if(is_same<RotationMatrixTransformConvention, PASSIVE>::value) {
+    } else if(is_same<RotationMatrixConvention, PASSIVE>::value) {
         (*this) = cos_angle * Identity() + (Type(1) - cos_angle) * (axis * axis.T()) - sin_angle * axis.hat();
     }
 }
 
-template<typename RotationMatrixTransformConvention, typename Type>
-template<typename Axis, enable_if_t<(is_integral_constant_of_principal_rotation_axis<Axis>::value), int>>
-RotationMatrix<RotationMatrixTransformConvention, Type> RotationMatrix<RotationMatrixTransformConvention, Type>::RotatePrincipalAxis(const Type& angle) {
-    if(is_same<RotationMatrixTransformConvention, ACTIVE>::value) {
+template<typename RotationMatrixConvention, typename Type>
+template<typename Axis, enable_if_t<(is_principal_axis<Axis>::value), int>>
+RotationMatrix<RotationMatrixConvention, Type> RotationMatrix<RotationMatrixConvention, Type>::RotatePrincipalAxis(const Type& angle) {
+    if(is_same<RotationMatrixConvention, ACTIVE>::value) {
         if(is_same<Axis, X>::value) {
             return RotationMatrix{Type(1), Type(0), Type(0), Type(0), ::cos(angle), -::sin(angle), Type(0), ::sin(angle), ::cos(angle)};
         } else if(is_same<Axis, Y>::value) {
@@ -174,7 +174,7 @@ RotationMatrix<RotationMatrixTransformConvention, Type> RotationMatrix<RotationM
         } else if(is_same<Axis, Z>::value) {
             return RotationMatrix{::cos(angle), -::sin(angle), Type(0), ::sin(angle), ::cos(angle), Type(0), Type(0), Type(0), Type(1)};
         }
-    } else if(is_same<RotationMatrixTransformConvention, PASSIVE>::value) {
+    } else if(is_same<RotationMatrixConvention, PASSIVE>::value) {
         if(is_same<Axis, X>::value) {
             return RotationMatrix{Type(1), Type(0), Type(0), Type(0), ::cos(angle), ::sin(angle), Type(0), -::sin(angle), ::cos(angle)};
         } else if(is_same<Axis, Y>::value) {
@@ -188,14 +188,14 @@ RotationMatrix<RotationMatrixTransformConvention, Type> RotationMatrix<RotationM
     return RotationMatrix{};
 }
 
-template<typename RotationMatrixTransformConvention, typename Type>
-SquareMatrix<3, Type> RotationMatrix<RotationMatrixTransformConvention, Type>::log() const {
+template<typename RotationMatrixConvention, typename Type>
+SquareMatrix<3, Type> RotationMatrix<RotationMatrixConvention, Type>::log() const {
     const Type theta = ::acos(constrain((this->trace() - Type(1)) / Type(2), Type(-1), Type(1)));
     return theta < epsilon<Type>() ? Null() : theta / (Type(2) * ::sin(theta)) * (*this - this->T());
 }
 
-template<typename RotationMatrixTransformConvention, typename Type>
-RotationMatrix<RotationMatrixTransformConvention, Type> RotationMatrix<RotationMatrixTransformConvention, Type>::pow(const Type& t) const {
+template<typename RotationMatrixConvention, typename Type>
+RotationMatrix<RotationMatrixConvention, Type> RotationMatrix<RotationMatrixConvention, Type>::pow(const Type& t) const {
     Vector3<Type> a = t * this->log().vee();
     const Type theta = a.norm();
 
@@ -211,13 +211,13 @@ RotationMatrix<RotationMatrixTransformConvention, Type> RotationMatrix<RotationM
     return c * Identity() + (Type(1) - c) * a * a.T() + s * a.hat();
 }
 
-template<typename RotationMatrixTransformConvention, typename Type>
-RotationMatrix<RotationMatrixTransformConvention, Type> RotationMatrix<RotationMatrixTransformConvention, Type>::interpolate(const RotationMatrix& to, const Type& t) const {
+template<typename RotationMatrixConvention, typename Type>
+RotationMatrix<RotationMatrixConvention, Type> RotationMatrix<RotationMatrixConvention, Type>::interpolate(const RotationMatrix& to, const Type& t) const {
     const RotationMatrix& from = *this;
 
-    if(is_same<RotationMatrixTransformConvention, ACTIVE>::value) {
+    if(is_same<RotationMatrixConvention, ACTIVE>::value) {
         return from * (from.T() * to).pow(t);
-    } else if(is_same<RotationMatrixTransformConvention, PASSIVE>::value) {
+    } else if(is_same<RotationMatrixConvention, PASSIVE>::value) {
         return (to * from.T()).pow(t) * from;
     }
 
@@ -225,8 +225,8 @@ RotationMatrix<RotationMatrixTransformConvention, Type> RotationMatrix<RotationM
     return RotationMatrix{};
 }
 
-template<typename RotationMatrixTransformConvention, typename Type>
-void RotationMatrix<RotationMatrixTransformConvention, Type>::normalize() {
+template<typename RotationMatrixConvention, typename Type>
+void RotationMatrix<RotationMatrixConvention, Type>::normalize() {
     // Get eigenvalues & eigenvectors of R*R^T
     const SquareMatrix<3, Type> RRt = (*this) * (this->T());
     const array<EigenPair<Type>, 3> eigenpairs = EigenSolver<Type>{}(RRt);
@@ -238,33 +238,33 @@ void RotationMatrix<RotationMatrixTransformConvention, Type>::normalize() {
 }
 
 template<typename T>
-struct is_integral_constant_of_principal_rotation_axis : false_type {
+struct is_principal_axis : false_type {
 };
 template<>
-struct is_integral_constant_of_principal_rotation_axis<X> : true_type {
+struct is_principal_axis<X> : true_type {
 };
 template<>
-struct is_integral_constant_of_principal_rotation_axis<Y> : true_type {
+struct is_principal_axis<Y> : true_type {
 };
 template<>
-struct is_integral_constant_of_principal_rotation_axis<Z> : true_type {
+struct is_principal_axis<Z> : true_type {
 };
 
 template<typename T>
-struct is_integral_constant_of_rotation_matrix_transform_convention : false_type {
+struct is_rotation_matrix_convention : false_type {
 };
 template<>
-struct is_integral_constant_of_rotation_matrix_transform_convention<ACTIVE> : true_type {
+struct is_rotation_matrix_convention<ACTIVE> : true_type {
 };
 template<>
-struct is_integral_constant_of_rotation_matrix_transform_convention<PASSIVE> : true_type {
+struct is_rotation_matrix_convention<PASSIVE> : true_type {
 };
 
 using ALIBI = ACTIVE;
 using ALIAS = PASSIVE;
 
 template<typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
-using DirectionCosineMatrix = RotationMatrix<RotationMatrixTransformConvention, Type>;
+using DirectionCosineMatrix = RotationMatrix<RotationMatrixConvention, Type>;
 template<typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 using DCM = DirectionCosineMatrix<Type>;
 
