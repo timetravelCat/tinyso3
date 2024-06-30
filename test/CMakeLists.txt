@@ -25,6 +25,6 @@ foreach(test ${TESTS})
                                           Catch2::Catch2WithMain)
   target_compile_options(
     ${target} PRIVATE -Wno-double-promotion -Wno-unused-variable
-                      -Wno-unused-but-set-variable)
+                      -Wno-unused-but-set-variable -Wno-deprecated-copy)
   catch_discover_tests(${target})
 endforeach()
