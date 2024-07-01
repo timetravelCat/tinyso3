@@ -21,7 +21,7 @@ class Euler;
 template<typename Type>
 class AxisAngle;
 
-template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION,
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION,
          typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 class RotationMatrix : public SquareMatrix<3, Type> {
 protected:

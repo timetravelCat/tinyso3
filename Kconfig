@@ -13,10 +13,10 @@ endchoice
 
 choice 
      prompt "Default rotation matrix transformation convention"
-     default DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION_ACTIVE
-     config DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION_ACTIVE
+     default DEFAULT_ROTATION_MATRIX_CONVENTION_ACTIVE
+     config DEFAULT_ROTATION_MATRIX_CONVENTION_ACTIVE
           bool "Active(Alibi)"
-     config DEFAULT_ROTATION_MATRIX_TRANSFORMATION_CONVENTION_PASSIVE
+     config DEFAULT_ROTATION_MATRIX_CONVENTION_PASSIVE
           bool "Passive(Alias)"
 endchoice
 
