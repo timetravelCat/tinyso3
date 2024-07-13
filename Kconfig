@@ -31,3 +31,59 @@ config DEFAULT_FLOATING_POINT_PRECISION_128_EPSILON
      help
           The default floating point precision epsilon for long double(128).
           The epsilon would be 1e-{n}.
+
+choice 
+     prompt "Default rotation matrix transformation convention"
+     default DEFAULT_ROTATION_MATRIX_CONVENTION_ACTIVE
+     config DEFAULT_ROTATION_MATRIX_CONVENTION_ACTIVE
+          bool "Active(Alibi)"
+     config DEFAULT_ROTATION_MATRIX_CONVENTION_PASSIVE
+          bool "Passive(Alias)"
+endchoice
+
+choice 
+     prompt "Default euler angle convention"
+     default DEFAULT_EULER_ANGLE_CONVENTION_INTRINSIC
+     config DEFAULT_EULER_ANGLE_CONVENTION_INTRINSIC
+          bool "Intrinsic"
+     config DEFAULT_EULER_ANGLE_CONVENTION_EXTRINSIC
+          bool "Extrinsic"
+endchoice
+
+choice 
+     prompt "Default euler angle sequence"
+     default DEFAULT_EULER_ANGLE_SEQUENCE_ZYX
+     config DEFAULT_EULER_ANGLE_SEQUENCE_XYZ
+          bool "XYZ"
+     config DEFAULT_EULER_ANGLE_SEQUENCE_XZY
+          bool "XZY"
+     config DEFAULT_EULER_ANGLE_SEQUENCE_YXZ
+          bool "YXZ"
+     config DEFAULT_EULER_ANGLE_SEQUENCE_YZX
+          bool "YZX"
+     config DEFAULT_EULER_ANGLE_SEQUENCE_ZXY
+          bool "ZXY"
+     config DEFAULT_EULER_ANGLE_SEQUENCE_ZYX
+          bool "ZYX"
+     config DEFAULT_EULER_ANGLE_SEQUENCE_XYX
+          bool "XYX"
+     config DEFAULT_EULER_ANGLE_SEQUENCE_XZX
+          bool "XZX"
+     config DEFAULT_EULER_ANGLE_SEQUENCE_YXY
+          bool "YXY"
+     config DEFAULT_EULER_ANGLE_SEQUENCE_YZY
+          bool "YZY"
+     config DEFAULT_EULER_ANGLE_SEQUENCE_ZXZ
+          bool "ZXZ"
+     config DEFAULT_EULER_ANGLE_SEQUENCE_ZYZ
+          bool "ZYZ"
+endchoice
+
+choice 
+     prompt "Default quaternion convention"
+     default DEFAULT_QUATERNION_CONVENTION_HAMILTON
+     config DEFAULT_QUATERNION_CONVENTION_HAMILTON
+          bool "Hamilton"
+     config DEFAULT_QUATERNION_CONVENTION_JPL
+          bool "JPL"
+endchoice
