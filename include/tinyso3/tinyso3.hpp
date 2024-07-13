@@ -9,3 +9,4 @@
 #pragma once
 
 #include "RotationMatrix.hpp"
+#include "Euler.hpp"

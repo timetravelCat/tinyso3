@@ -27,6 +27,14 @@ TEST_CASE("RotationMatrix") {
         REQUIRE(fabs(m1(2, 0) - 0.0f) < 1e-4f);
         REQUIRE(fabs(m1(2, 1) - 0.0f) < 1e-4f);
         REQUIRE(fabs(m1(2, 2) - 1.0f) < 1e-4f);
+
+        Euler<INTRINSIC, ZYX, float> euler{0.0f, 0.2f, 0.0f};
+        RotationMatrix<ACTIVE, float> m2{euler};
+        Euler<INTRINSIC, ZYX, float> euler_compare{m2};
+
+        REQUIRE_THAT(euler(0), Catch::Matchers::WithinAbs(euler_compare(0), 1e-4f));
+        REQUIRE_THAT(euler(1), Catch::Matchers::WithinAbs(euler_compare(1), 1e-4f));
+        REQUIRE_THAT(euler(2), Catch::Matchers::WithinAbs(euler_compare(2), 1e-4f));
     }
 
     SECTION("SO3 Group Operations") {

@@ -17,6 +17,22 @@ RotationMatrix<RotationMatrixConvention, Type>::RotationMatrix(const SquareMatri
 SquareMatrix<3, Type>(other) {}
 
 template<typename RotationMatrixConvention, typename Type>
+template<typename EulerConvention, typename EulerSequence>
+RotationMatrix<RotationMatrixConvention, Type>::RotationMatrix(const Euler<EulerConvention, EulerSequence, Type>& euler) {
+    if((is_same<EulerConvention, INTRINSIC>::value && is_same<RotationMatrixConvention, ACTIVE>::value) ||
+       (is_same<EulerConvention, EXTRINSIC>::value && is_same<RotationMatrixConvention, PASSIVE>::value)) {
+        (*this) = RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis1>>(euler(0)) *
+                  RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis2>>(euler(1)) *
+                  RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis3>>(euler(2));
+    } else if((is_same<EulerConvention, INTRINSIC>::value && is_same<RotationMatrixConvention, PASSIVE>::value) ||
+              (is_same<EulerConvention, EXTRINSIC>::value && is_same<RotationMatrixConvention, ACTIVE>::value)) {
+        (*this) = RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis3>>(euler(2)) *
+                  RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis2>>(euler(1)) *
+                  RotatePrincipalAxis<integral_constant<PrincipalAxis, EulerSequence::Axis1>>(euler(0));
+    }
+}
+
+template<typename RotationMatrixConvention, typename Type>
 template<typename Axis, enable_if_t<(is_principal_axis<Axis>::value), int>>
 RotationMatrix<RotationMatrixConvention, Type> RotationMatrix<RotationMatrixConvention, Type>::RotatePrincipalAxis(const Type& angle) {
     if(is_same<RotationMatrixConvention, ACTIVE>::value) {
