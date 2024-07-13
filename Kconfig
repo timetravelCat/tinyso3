@@ -1,0 +1,4 @@
+mainmenu "cpp-cmake-template"
+
+config CPP_CMAKE_TEMPLATE_FEATURE_1
+     bool "cpp-cmake-template feature 1"
