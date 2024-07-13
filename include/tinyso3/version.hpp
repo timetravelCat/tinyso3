@@ -1,11 +1,11 @@
 #pragma once
 
-#define TINYSO3_VERSION "0.0.0"
+#define TINYSO3_VERSION "0.1.0"
 
 #define TINYSO3_MAJOR_VERSION 0
-#define TINYSO3_MINOR_VERSION 0
+#define TINYSO3_MINOR_VERSION 1
 #define TINYSO3_PATCH_VERSION 0
-#define TINYSO3_TWEAK_VERSION "0590244"
+#define TINYSO3_TWEAK_VERSION "9331c26"
 
 #include "config.hpp"
 
