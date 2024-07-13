@@ -1,74 +1,104 @@
-# cpp-cmake-template
+<p align="center">
+  <img src="docs/tinyso3.jpg" style="width: 30%;"/>
+</p>
+
+# tinyso3
+TinySO3 is a compact and efficient library designed to handle 3D rotations using various mathematical representations including rotation matrices, quaternions, and Lie groups (SO(3)). Whether you're working on robotics, computer graphics, or aerospace applications, TinySO3 provides the essential tools for managing and manipulating 3D rotational data with precision and ease.
+
+[Theory document](https://timetravelcat.github.io/tinyso3/)
 
 # Features
-- [**CMake**](!https://cmake.org/) as main build system for C++ project
-- Format cpp files by [**clang-format**](!https://clang.llvm.org/docs/ClangFormat.html)
-- Format cmake files by [**cmake-format**](!https://cmake-format.readthedocs.io/en/latest/)
-- Documentation by [**MkDocs**](https://www.mkdocs.org/) with [Github Pages](https://pages.github.com/).
-- [**Dracula**](https://github.com/dracula/mkdocs) as main theme of MkDocs
-- [**Catch2**](https://github.com/catchorg/Catch2) as main testing framework
-- [**Parse git tag**](cmake/parse_git_tag.cmake) and automatic version header generation.
-- [**Static Analyzers**](cmake/static_analyzers.cmake) by [cppcheck](!https://github.com/danmar/cppcheck) and [clang-tidy](!https://clang.llvm.org/extra/clang-tidy/).
-- Project configuration by [**Kconfiglib**](https://github.com/ulfalizer/Kconfiglib), [Tips](https://docs.zephyrproject.org/latest/build/kconfig/tips.html)
+- Rotation Matrices: Functions for creating, transforming, and composing rotation matrices.
+  - Supported Convention : **Passive(Alias)** and **Active(Alibi)** 
+- Quaternions: Comprehensive support for quaternion algebra, including conversion, interpolation, and normalization.
+  - Supported Convention : **Hamilton** and **JPL**
+- Axis Angle: Tools for representing and converting rotations using the axis-angle representation.
+- Euler Angles: Support for multiple Euler angle conventions and conversion between Euler angles and other representations.
+  - Supported Convention : **Intrinsic** and **Extrinsic**
+  - All 12 representation of euler angles are supported, including **Tait-Bryan** and **Proper**.
+- Lie Groups: Efficient methods for working with Lie group representations of rotations, specifically SO(3).
+- Interoperability: Seamless conversion between different rotation representations.
+- Conversion between **Euler Rate** and **Angular Velocity**
+- Performance: Optimized for speed and minimal memory usage, making it suitable for real-time applications.
+- C++11 [Header-Only](!https://en.wikipedia.org/wiki/Header-only) library.
+- Standard C++ library is not required.
+- No dynamic allocations.
 
-# Prerequisites
+# Installation
+**tinyso3** has no dependencies except testing(disabled by default). 
 
-All requirements are **optional**.
+**tinyso3** follows general steps of CMake projects.
 
-Formatting Requirements
+Before installation, you can configure default template arguments.
+```bash
+pip install kconfiglib
+make config
+```
+Or manually configure [config.hpp](include/tinyso3/config.hpp), [version.hpp](include/tinyso3/version.hpp)
+
+
+## Option 1 (CMake)
+```bash
+mkdir -p build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . -- -j
+cmake --install .
+```
+```cmake
+find_package(tinyso3 REQUIRED)
+add_executable(myapp main.cpp)
+target_link_library(myapp PRIVATE tinyso3::tinyso3)
+```
+## Option 2 (CMake FetchContents)
+```cmake
+include(FetchContent)
+FetchContent_Declare(tinyso3 GIT_REPOSITORY
+https://github.com/timetravelCat/tinyso3)
+FetchContent_MakeAvailable(tinyso3)
+...
+target_link_libraries(myapp PRIVATE tinyso3)
+```
+## Option 3 (Copy & Paste)
+Copy include/tinyso3 folder to your project. C++11 compiler is required.
+
+# Tutorials
+See the test directory for detailed examples.
+
+[tutorial.cpp](tutorial.cpp)
+
+(Work in Progress)
+
+# Development
+## Running the tests
+- Install [Catch2 v3.4 or higher](https://github.com/catchorg/Catch2)
+```bash
+mkdir -p build && cd build
+cmake .. -DBUILD_TESTING=ON
+cmake --build . -- -j
+ctest # or make test
+```
+
+## Formatting
+- Install [clang-format](https://clang.llvm.org/docs/ClangFormat.html) and [cmake-format](https://cmake-format.readthedocs.io/en/latest/)
 ```bash
 pip install cmake-format
 sudo apt install clang-format 
 ```
-
-Documentation Requirements
 ```bash
-pip install mkdocs mkdocs-material pymdown-extensions mkdocs-dracula-theme 
+make format # all c++ files and cmake files will be formatted.
 ```
+- If you are using vscode, install clang-format extension.
 
-Kconfig Requirements
-```bash
-pip install kconfiglib
-```
-
-Testing Requirements 
-- Install appropriate version of [**Catch2**](https://github.com/catchorg/Catch2). 
-
-Static Analyzers Requirements
+## Static Analyzers
 ```bash
 sudo apt install cppcheck clang-tidy
 ```
 
-# Getting Started
-## Automatic Setup
+## Documentations
 ```bash
-make initialize PROJECT_NAME=$(PROJECT_NAME) # set PROJECT_NAME name without "".
-```
-
-## Manual Setup
-- Change cmake/cpp-cmake-templateConfig.cmake.in to cmake/$(PROJECT_NAME)Config.cmake.in
-- Change include/cpp-cmake-template to include/$(PROJECT_NAME)
-- Replace 'cpp-cmake-template' to '$(PROJECT_NAME)' of CMakeLists.txt
-
-# Documentations
-[**MkDocs tutorial**](https://www.mkdocs.org/getting-started/)
-
-Go to the settings of your repository and ensure that the [publishing source branch](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) for your GitHub Page is set to gh-pages
-
-# Running examples
-```bash
-mkdir -p build && cd build
-cmake .. -DBUILD_EXAMPLE=ON
-cmake --build .
-make run_examples # if you want to run all examples
-```
-
-# Running the tests
-```bash
-mkdir -p build && cd build
-cmake .. -DBUILD_TESTING=ON
-cmake --build .
-ctest # or make test
+pip3 install mkdocs mkdocs-material pymdown-extensions mkdocs-dracula-theme 
+mkdocs build
+mkdocs serve
 ```
 
 # License

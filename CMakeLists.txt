@@ -2,49 +2,51 @@ cmake_minimum_required(VERSION 3.16.3)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(parse_git_tag)
-include(target_compile_options_common)
+include(add_compile_warnings)
 include(static_analyzers)
 
+# Set the project name and version
 project(
-  cpp-cmake-template
+  tinyso3
   VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}
+  DESCRIPTION "A Lightweight C++ Library for 3D Rotations."
   LANGUAGES CXX)
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UPPER)
-string(REPLACE "-" "_" PROJECT_NAME_UPPER ${PROJECT_NAME_UPPER})
 configure_file(cmake/version.hpp.in
-               ${CMAKE_SOURCE_DIR}/include/cpp-cmake-template/version.hpp @ONLY)
+               ${CMAKE_SOURCE_DIR}/include/tinyso3/version.hpp @ONLY)
 
 # Generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Options
-option(BUILD_EXAMPLE "" OFF)
-option(BUILD_TESTING "" OFF)
-
-# C++ standard
-set(CMAKE_CXX_STANDARD 14)
+# Enforce C++11
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED On)
 
-# Library Setup (In Case of Header Only)
+# Library setup
 add_library(${PROJECT_NAME} INTERFACE)
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-target_compile_options_common(${PROJECT_NAME} INTERFACE)
+add_compile_warnings(${PROJECT_NAME})
 target_include_directories(
-  ${PROJECT_NAME}
-  INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-            $<INSTALL_INTERFACE:include>)
+  ${PROJECT_NAME} INTERFACE $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+                            $<INSTALL_INTERFACE:include>)
 
+# Testing setup
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-  # Example setup
-  if(BUILD_EXAMPLE)
-    add_subdirectory(examples)
-  endif()
-
-  # Testing framework
+  option(BUILD_TESTING "" OFF) # Set to OFF by default
   include(CTest)
   if(BUILD_TESTING)
     add_subdirectory(test)
   endif()
+
+  # tutorial executable
+  add_executable(tutorial tutorial.cpp)
+  target_link_libraries(tutorial ${PROJECT_NAME})
+  add_stdlibcpp_exceptions(tutorial)
+  set_target_properties(tutorial PROPERTIES CXX_CLANG_TIDY "")
+  set_target_properties(tutorial PROPERTIES CXX_CPPCHECK "")
+  target_compile_options(
+    tutorial PRIVATE -Wno-double-promotion -Wno-unused-variable
+                     -Wno-unused-but-set-variable -Wno-unused-parameter)
 endif()
 
 # Installation setup

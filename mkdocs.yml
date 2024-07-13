@@ -1,7 +1,7 @@
-site_name: cpp-cmake-template
+site_name: tinyso3
 theme:
   name: dracula
-  # logo: path_to_logo.png
+  logo: tinyso3.jpg
   features:
     - navigation.tabs
     - navigation.instant
@@ -23,4 +23,4 @@ extra_javascript:
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
-  - Home: index.md # first page should be 
+  - Home: index.md

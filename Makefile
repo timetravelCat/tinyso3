@@ -3,25 +3,16 @@
 help: ## print this implemented make commands 
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-format: ## format CMakelists.txt, *.cmake and C++ files
+format: ## format CMakelists.txt and C++ files
 	$(call becho,Formatting the CMake files using cmake-format)
 	@find . \( -name "CMakeLists.txt" -o -name "*.cmake" \) ! -path "./build/*" -print0 | xargs -0 -I {} sh -c 'echo {} && cmake-format -i {}'
 	$(call becho,Formatting the C++ code using clang-format)
 	@find include test -type f \( -name "*.hpp" -o -name "*.cpp" \) | grep -e . | xargs -I {} sh -c 'echo {} && clang-format -i {}'
 
 config: ## configure the project using kconfig
-	$(call gecho,Configuring cpp-cmake-template)
+	$(call gecho,Configuring tinyso3)
 	@python -m menuconfig
-	@python -m genconfig --header-path include/cpp-cmake-template/config.hpp
-
-initialize: ## initialize the project
-	@echo PROJECT_NAME=$(PROJECT_NAME)
-	$(if $(PROJECT_NAME),,@echo "PROJECT_NAME is empty" && exit 1)
-	@mv cmake/cpp-cmake-templateConfig.cmake.in cmake/$(PROJECT_NAME)Config.cmake.in
-	@mv include/cpp-cmake-template include/$(PROJECT_NAME)
-	@sed -i 's/cpp-cmake-template/$(PROJECT_NAME)/g' CMakeLists.txt
-	@sed -i 's/cpp-cmake-template/$(PROJECT_NAME)/g' mkdocs.yml
-	@sed -i 's/\"cpp-cmake-template\"/\"$(PROJECT_NAME)\"/g' Makefile
+	@python -m genconfig --header-path include/tinyso3/config.hpp
 
 #### Helper Functions ####
 
@@ -40,9 +31,8 @@ export BROWSER_PYSCRIPT
 define PRINT_HELP_PYSCRIPT
 import re, sys
 
-print("cpp-cmake-template")
-print("A modern C++ project template with CMake\n")
-
+print("TinySO(3)")
+print("A Lightweight C++ Library for 3D Rotations. \n")
 print("Usage: make <target> <options>")
 
 for line in sys.stdin:
