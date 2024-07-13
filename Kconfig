@@ -1,4 +1,33 @@
-mainmenu "cpp-cmake-template"
+mainmenu "tinyso3"
 
-config CPP_CMAKE_TEMPLATE_FEATURE_1
-     bool "cpp-cmake-template feature 1"
+choice
+     prompt "Default floating point precision"
+     default DEFAULT_FLOATING_POINT_PRECISION_32
+     config DEFAULT_FLOATING_POINT_PRECISION_32
+          bool "float(32)"
+     config DEFAULT_FLOATING_POINT_PRECISION_64
+          bool "double(64)"
+     config DEFAULT_FLOATING_POINT_PRECISION_128
+          bool "long double(128)"
+endchoice
+
+config DEFAULT_FLOATING_POINT_PRECISION_32_EPSILON
+     int "Floating Point Epsilon Exponent (Single Precision)"
+     default 4
+     help
+          The default floating point precision epsilon for float(32).
+          The epsilon would be 1e-{n}.
+
+config DEFAULT_FLOATING_POINT_PRECISION_64_EPSILON
+     int "Floating Point Epsilon Exponent (Double Precision)"
+     default 10
+     help
+          The default floating point precision epsilon for double(64).
+          The epsilon would be 1e-{n}.
+
+config DEFAULT_FLOATING_POINT_PRECISION_128_EPSILON
+     int "Floating Point Epsilon Exponent (Long Double Precision)"
+     default 16
+     help
+          The default floating point precision epsilon for long double(128).
+          The epsilon would be 1e-{n}.
