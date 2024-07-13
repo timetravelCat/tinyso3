@@ -5,6 +5,13 @@
 using namespace tinyso3;
 
 TEST_CASE("Euler") {
+    // Axis Angle to Euler Angle
+    AxisAngle<float> axis_angle{0.0f, 0.2f, 0.0f};
+    Euler<INTRINSIC, ZYX, float> euler{axis_angle};
+    REQUIRE(fabs(euler(0) - 0.0f) < 1e-4f);
+    REQUIRE(fabs(euler(1) - 0.2f) < 1e-4f);
+    REQUIRE(fabs(euler(2) - 0.0f) < 1e-4f);
+
     // Create Euler Angle of All Sequences
     Euler<INTRINSIC, XYZ, float> euler_xyz(0.1f, 0.2f, 0.3f);
     Euler<INTRINSIC, XZY, float> euler_xzy(0.1f, 0.2f, 0.3f);

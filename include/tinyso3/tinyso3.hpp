@@ -10,3 +10,4 @@
 
 #include "RotationMatrix.hpp"
 #include "Euler.hpp"
+#include "AxisAngle.hpp"

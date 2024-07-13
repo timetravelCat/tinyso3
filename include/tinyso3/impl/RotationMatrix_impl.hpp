@@ -33,6 +33,21 @@ RotationMatrix<RotationMatrixConvention, Type>::RotationMatrix(const Euler<Euler
 }
 
 template<typename RotationMatrixConvention, typename Type>
+RotationMatrix<RotationMatrixConvention, Type>::RotationMatrix(const AxisAngle<Type>& axis_angle) {
+    const Type angle = axis_angle.angle();
+    const Vector3<Type> axis = axis_angle.axis();
+
+    const Type cos_angle = cos(angle);
+    const Type sin_angle = sin(angle);
+
+    if(is_same<RotationMatrixConvention, ACTIVE>::value) {
+        (*this) = cos_angle * Identity() + (Type(1) - cos_angle) * (axis * axis.T()) + sin_angle * axis.hat();
+    } else if(is_same<RotationMatrixConvention, PASSIVE>::value) {
+        (*this) = cos_angle * Identity() + (Type(1) - cos_angle) * (axis * axis.T()) - sin_angle * axis.hat();
+    }
+}
+
+template<typename RotationMatrixConvention, typename Type>
 template<typename Axis, enable_if_t<(is_principal_axis<Axis>::value), int>>
 RotationMatrix<RotationMatrixConvention, Type> RotationMatrix<RotationMatrixConvention, Type>::RotatePrincipalAxis(const Type& angle) {
     if(is_same<RotationMatrixConvention, ACTIVE>::value) {
