@@ -5,7 +5,7 @@
 #define TINYSO3_MAJOR_VERSION 0
 #define TINYSO3_MINOR_VERSION 2
 #define TINYSO3_PATCH_VERSION 0
-#define TINYSO3_TWEAK_VERSION "f44a247"
+#define TINYSO3_TWEAK_VERSION "36cd644"
 
 #include "config.hpp"
 #include "conventions.hpp"

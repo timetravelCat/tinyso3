@@ -12,3 +12,5 @@
 #include "Euler.hpp"
 #include "AxisAngle.hpp"
 #include "Quaternion.hpp"
+#include "AngularVelocity.hpp"
+#include "EulerRate.hpp"
