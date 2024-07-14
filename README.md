@@ -180,3 +180,6 @@ This project is licensed under the [BSD-3-Clause](https://opensource.org/license
 
 # Contact
 timetravelCat - timetraveler930@gmail.com
+
+# Contributors 
+Special thanks to [@lightAxis](https://github.com/lightAxis) who implemented the quaternion functionality.
