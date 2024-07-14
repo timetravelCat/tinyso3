@@ -31,6 +31,23 @@ AxisAngle<Type>::AxisAngle(const Euler<EulerConvention, EulerSequence, Type>& eu
 AxisAngle(RotationMatrix<ACTIVE, Type>{euler}){};
 
 template<typename Type>
+template<typename QuaternionConvention>
+AxisAngle<Type>::AxisAngle(const Quaternion<QuaternionConvention, Type>& quaternion) {
+    const Type angle = Type(2) * acos(quaternion.w());
+
+    if(fabs(Type(1) - quaternion.w() * quaternion.w()) < epsilon<Type>()) {
+        (*this) = Vector3<Type>{Type(0), Type(0), Type(0)};
+    } else {
+        const Type acos2 = sqrt(Type(1) - quaternion.w() * quaternion.w());
+        if(is_same<QuaternionConvention, HAMILTON>::value) {
+            (*this) = Vector3<Type>{quaternion.x(), quaternion.y(), quaternion.z()} / acos2 * angle;
+        } else if(is_same<QuaternionConvention, JPL>::value) {
+            (*this) = Vector3<Type>{-quaternion.x(), -quaternion.y(), -quaternion.z()} / acos2 * angle;
+        }
+    }
+}
+
+template<typename Type>
 AxisAngle<Type>::AxisAngle(const Vector3<Type>& axis_angle) :
 Vector3<Type>(axis_angle){};
 

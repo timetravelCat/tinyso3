@@ -12,6 +12,14 @@ TEST_CASE("Euler") {
     REQUIRE(fabs(euler(1) - 0.2f) < 1e-4f);
     REQUIRE(fabs(euler(2) - 0.0f) < 1e-4f);
 
+    // Quaternion to Euler Angle
+    Euler<INTRINSIC, XYZ, float> euler_reference_q{0.1f, 0.2f, 0.3f};
+    Quaternion<HAMILTON, float> quaternion{euler_reference_q};
+    Euler<INTRINSIC, XYZ, float> euler_compare_q{quaternion};
+    REQUIRE_THAT(euler_reference_q.x(), Catch::Matchers::WithinAbs(euler_compare_q.x(), 1e-4f));
+    REQUIRE_THAT(euler_reference_q.y(), Catch::Matchers::WithinAbs(euler_compare_q.y(), 1e-4f));
+    REQUIRE_THAT(euler_reference_q.z(), Catch::Matchers::WithinAbs(euler_compare_q.z(), 1e-4f));
+
     // Create Euler Angle of All Sequences
     Euler<INTRINSIC, XYZ, float> euler_xyz(0.1f, 0.2f, 0.3f);
     Euler<INTRINSIC, XZY, float> euler_xzy(0.1f, 0.2f, 0.3f);
