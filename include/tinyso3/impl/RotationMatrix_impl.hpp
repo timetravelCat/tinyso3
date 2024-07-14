@@ -48,6 +48,36 @@ RotationMatrix<RotationMatrixConvention, Type>::RotationMatrix(const AxisAngle<T
 }
 
 template<typename RotationMatrixConvention, typename Type>
+RotationMatrix<RotationMatrixConvention, Type>::RotationMatrix(const QuaternionAlias& quaternion) {
+    // convert qw,qx,qy,qz to rotation matrix
+    const Type qw = quaternion.w();
+    const Type qx = quaternion.x();
+    const Type qy = quaternion.y();
+    const Type qz = quaternion.z();
+
+    data[0][0] = Type(1) - Type(2) * (qy * qy + qz * qz);
+    data[1][1] = Type(1) - Type(2) * (qx * qx + qz * qz);
+    data[2][2] = Type(1) - Type(2) * (qx * qx + qy * qy);
+
+    if(is_same<typename QuaternionAlias::Convention, HAMILTON>::value) {
+        data[1][0] = Type(2) * (qx * qy + qz * qw);
+        data[0][1] = Type(2) * (qx * qy - qz * qw);
+        data[1][2] = Type(2) * (qy * qz - qx * qw);
+        data[2][1] = Type(2) * (qy * qz + qx * qw);
+        data[2][0] = Type(2) * (qx * qz - qy * qw);
+        data[0][2] = Type(2) * (qx * qz + qy * qw);
+
+    } else if(is_same<typename QuaternionAlias::Convention, JPL>::value) {
+        data[0][1] = Type(2) * (qx * qy + qz * qw);
+        data[1][0] = Type(2) * (qx * qy - qz * qw);
+        data[2][1] = Type(2) * (qy * qz - qx * qw);
+        data[1][2] = Type(2) * (qy * qz + qx * qw);
+        data[0][2] = Type(2) * (qx * qz - qy * qw);
+        data[2][0] = Type(2) * (qx * qz + qy * qw);
+    }
+}
+
+template<typename RotationMatrixConvention, typename Type>
 template<typename Axis, enable_if_t<(is_principal_axis<Axis>::value), int>>
 RotationMatrix<RotationMatrixConvention, Type> RotationMatrix<RotationMatrixConvention, Type>::RotatePrincipalAxis(const Type& angle) {
     if(is_same<RotationMatrixConvention, ACTIVE>::value) {

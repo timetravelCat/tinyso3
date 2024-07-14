@@ -121,3 +121,8 @@ Euler<EulerConvention, EulerSequence, Type>::Euler(const RotationMatrix<Rotation
 template<typename EulerConvention, typename EulerSequence, typename Type>
 Euler<EulerConvention, EulerSequence, Type>::Euler(const AxisAngle<Type>& axis_angle) :
 Euler(RotationMatrix<ACTIVE, Type>{axis_angle}){};
+
+template<typename EulerConvention, typename EulerSequence, typename Type>
+template<typename QuaternionConvention>
+Euler<EulerConvention, EulerSequence, Type>::Euler(const Quaternion<QuaternionConvention, Type>& quaternion) :
+Euler(typename Quaternion<QuaternionConvention, Type>::RotationMatrixAlias{quaternion}) {}

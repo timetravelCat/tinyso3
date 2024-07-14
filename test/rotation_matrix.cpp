@@ -38,7 +38,7 @@ TEST_CASE("RotationMatrix") {
 
         AxisAngle<float> axis_angle{euler};
         RotationMatrix<ACTIVE, float> m3{axis_angle};
-        
+
         REQUIRE_THAT(m3(0, 0), Catch::Matchers::WithinAbs(m2(0, 0), 1e-4f));
         REQUIRE_THAT(m3(0, 1), Catch::Matchers::WithinAbs(m2(0, 1), 1e-4f));
         REQUIRE_THAT(m3(0, 2), Catch::Matchers::WithinAbs(m2(0, 2), 1e-4f));
@@ -48,6 +48,19 @@ TEST_CASE("RotationMatrix") {
         REQUIRE_THAT(m3(2, 0), Catch::Matchers::WithinAbs(m2(2, 0), 1e-4f));
         REQUIRE_THAT(m3(2, 1), Catch::Matchers::WithinAbs(m2(2, 1), 1e-4f));
         REQUIRE_THAT(m3(2, 2), Catch::Matchers::WithinAbs(m2(2, 2), 1e-4f));
+
+        Quaternion<HAMILTON, float> q_hamilton{euler};
+        RotationMatrix<ACTIVE, float> m4{q_hamilton};
+
+        REQUIRE_THAT(m4(0, 0), Catch::Matchers::WithinAbs(m2(0, 0), 1e-4f));
+        REQUIRE_THAT(m4(0, 1), Catch::Matchers::WithinAbs(m2(0, 1), 1e-4f));
+        REQUIRE_THAT(m4(0, 2), Catch::Matchers::WithinAbs(m2(0, 2), 1e-4f));
+        REQUIRE_THAT(m4(1, 0), Catch::Matchers::WithinAbs(m2(1, 0), 1e-4f));
+        REQUIRE_THAT(m4(1, 1), Catch::Matchers::WithinAbs(m2(1, 1), 1e-4f));
+        REQUIRE_THAT(m4(1, 2), Catch::Matchers::WithinAbs(m2(1, 2), 1e-4f));
+        REQUIRE_THAT(m4(2, 0), Catch::Matchers::WithinAbs(m2(2, 0), 1e-4f));
+        REQUIRE_THAT(m4(2, 1), Catch::Matchers::WithinAbs(m2(2, 1), 1e-4f));
+        REQUIRE_THAT(m4(2, 2), Catch::Matchers::WithinAbs(m2(2, 2), 1e-4f));
     }
 
     SECTION("SO3 Group Operations") {

@@ -9,11 +9,15 @@ TEST_CASE("AxisAngle") {
         Euler<INTRINSIC, ZYX, float> euler{0.0f, 0.2f, 0.0f};
         RotationMatrix<ACTIVE, float> dcm_active{euler};
         RotationMatrix<PASSIVE, float> dcm_passive{euler};
+        Quaternion<HAMILTON, float> q_hamilton{euler};
+        Quaternion<JPL, float> q_jpl{euler};
 
         AxisAngle<float> axis_angle_euler{euler};
         AxisAngle<float> axis_angle_dcm_active{dcm_active};
         AxisAngle<float> axis_angle_dcm_passive{dcm_passive};
-        
+        AxisAngle<float> axis_angle_q_hamilton{q_hamilton};
+        AxisAngle<float> axis_angle_q_jpl{q_jpl};
+
         AxisAngle<float> axis_angle_copy{axis_angle_euler};
         AxisAngle<float> axis_angle{Vector3<float>{0.0f, 1.0f, 0.0f}, 0.2f};
 
@@ -28,6 +32,14 @@ TEST_CASE("AxisAngle") {
         REQUIRE(fabs(axis_angle_dcm_passive(0) - 0.0f) < 1e-4f);
         REQUIRE(fabs(axis_angle_dcm_passive(1) - 0.2f) < 1e-4f);
         REQUIRE(fabs(axis_angle_dcm_passive(2) - 0.0f) < 1e-4f);
+
+        REQUIRE_THAT(axis_angle_q_hamilton(0), Catch::Matchers::WithinAbs(0.0f, 1e-4f));
+        REQUIRE_THAT(axis_angle_q_hamilton(1), Catch::Matchers::WithinAbs(0.2f, 1e-4f));
+        REQUIRE_THAT(axis_angle_q_hamilton(2), Catch::Matchers::WithinAbs(0.0f, 1e-4f));
+
+        REQUIRE_THAT(axis_angle_q_jpl(0), Catch::Matchers::WithinAbs(0.0f, 1e-4f));
+        REQUIRE_THAT(axis_angle_q_jpl(1), Catch::Matchers::WithinAbs(0.2f, 1e-4f));
+        REQUIRE_THAT(axis_angle_q_jpl(2), Catch::Matchers::WithinAbs(0.0f, 1e-4f));
 
         REQUIRE(fabs(axis_angle_copy(0) - 0.0f) < 1e-4f);
         REQUIRE(fabs(axis_angle_copy(1) - 0.2f) < 1e-4f);
