@@ -47,6 +47,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   target_compile_options(
     tutorial PRIVATE -Wno-double-promotion -Wno-unused-variable
                      -Wno-unused-but-set-variable -Wno-unused-parameter)
+  target_compile_features(tutorial PRIVATE cxx_std_11)
 endif()
 
 # Installation setup

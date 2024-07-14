@@ -38,6 +38,7 @@ function(add_compile_warnings)
                   # conversion has been implicitly applied
           /permissive- # standards conformance mode for MSVC compiler.
           /wd4996 # 'std::copy': Function call with parameters that may be unsafe
+          /Zc:__cplusplus # Enable updated __cplusplus macro
       )
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
       set(COMPILE_OPTIONS

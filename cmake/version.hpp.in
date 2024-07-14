@@ -7,6 +7,10 @@
 #define @PROJECT_NAME_UPPER@_PATCH_VERSION @PROJECT_VERSION_PATCH@
 #define @PROJECT_NAME_UPPER@_TWEAK_VERSION "@VERSION_TWEAK@"
 
+#if __cplusplus < 201103L
+#error This library requires at least a C++11 compliant compiler
+#endif
+
 #include "config.hpp"
 #include "conventions.hpp"
 

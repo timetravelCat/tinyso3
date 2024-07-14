@@ -5,7 +5,11 @@
 #define TINYSO3_MAJOR_VERSION 0
 #define TINYSO3_MINOR_VERSION 2
 #define TINYSO3_PATCH_VERSION 0
-#define TINYSO3_TWEAK_VERSION "36cd644"
+#define TINYSO3_TWEAK_VERSION "cd2cfeb"
+
+#if __cplusplus < 201103L
+#error This library requires at least a C++11 compliant compiler
+#endif
 
 #include "config.hpp"
 #include "conventions.hpp"
