@@ -63,5 +63,9 @@ public:
     inline const Type angle() const;
 };
 
+using AxisAnglef = AxisAngle<float>;
+using AxisAngled = AxisAngle<double>;
+using AxisAngleld = AxisAngle<long double>;
+
 #include "impl/AxisAngle_impl.hpp"
 }; // namespace tinyso3

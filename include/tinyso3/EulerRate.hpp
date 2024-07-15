@@ -34,5 +34,12 @@ public:
     EulerRate(const RotationMatrix<RotationMatrixConvention, Type>& dcm, const AngularVelocity<Type>& angular_velocity);
 };
 
+template<typename EulerConvention = TINYSO3_DEFAULT_EULER_ANGLE_CONVENTION, typename EulerSequence = TINYSO3_DEFAULT_EULER_ANGLE_SEQUENCE>
+using EulerRatef = EulerRate<EulerConvention, EulerSequence, float>;
+template<typename EulerConvention = TINYSO3_DEFAULT_EULER_ANGLE_CONVENTION, typename EulerSequence = TINYSO3_DEFAULT_EULER_ANGLE_SEQUENCE>
+using EulerRated = EulerRate<EulerConvention, EulerSequence, double>;
+template<typename EulerConvention = TINYSO3_DEFAULT_EULER_ANGLE_CONVENTION, typename EulerSequence = TINYSO3_DEFAULT_EULER_ANGLE_SEQUENCE>
+using EulerRateld = EulerRate<EulerConvention, EulerSequence, long double>;
+
 #include "impl/EulerRate_impl.hpp"
 } // namespace tinyso3

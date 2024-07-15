@@ -107,5 +107,12 @@ private:
     constexpr static int _Z = IDX<Z>();
 };
 
+template<typename QuaternionConvention = HAMILTON>
+using Quaternionf = Quaternion<QuaternionConvention, float>;
+template<typename QuaternionConvention = HAMILTON>
+using Quaterniond = Quaternion<QuaternionConvention, double>;
+template<typename QuaternionConvention = HAMILTON>
+using Quaternionld = Quaternion<QuaternionConvention, long double>;
+
 #include "impl/Quaternion_impl.hpp"
 } // namespace tinyso3

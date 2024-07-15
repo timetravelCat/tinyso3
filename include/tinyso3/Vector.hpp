@@ -67,5 +67,12 @@ public:
     inline Vector<M, Type> unit() const;
 };
 
+template<size_t M>
+using Vectorf = Vector<M, float>;
+template<size_t M>
+using Vectord = Vector<M, double>;
+template<size_t M>
+using Vectorld = Vector<M, long double>;
+
 #include "impl/Vector_impl.hpp"
 } // namespace tinyso3

@@ -102,10 +102,31 @@ public:
     using SquareMatrix<3, Type>::Null;
 };
 
-template<typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION, typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
 using DirectionCosineMatrix = RotationMatrix<RotationMatrixConvention, Type>;
-template<typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
-using DCM = DirectionCosineMatrix<Type>;
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION, typename Type = TINYSO3_DEFAULT_FLOATING_POINT_TYPE>
+using DCM = DirectionCosineMatrix<RotationMatrixConvention, Type>;
+
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION>
+using RotationMatrixf = RotationMatrix<RotationMatrixConvention, float>;
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION>
+using RotationMatrixd = RotationMatrix<RotationMatrixConvention, double>;
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION>
+using RotationMatrixld = RotationMatrix<RotationMatrixConvention, long double>;
+
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION>
+using DirectionCosineMatrixf = DirectionCosineMatrix<RotationMatrixConvention, float>;
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION>
+using DirectionCosineMatrixd = DirectionCosineMatrix<RotationMatrixConvention, double>;
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION>
+using DirectionCosineMatrixld = DirectionCosineMatrix<RotationMatrixConvention, long double>;
+
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION>
+using DCMf = DCM<RotationMatrixConvention, float>;
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION>
+using DCMd = DCM<RotationMatrixConvention, double>;
+template<typename RotationMatrixConvention = TINYSO3_DEFAULT_ROTATION_MATRIX_CONVENTION>
+using DCMld = DCM<RotationMatrixConvention, long double>;
 
 #include "impl/RotationMatrix_impl.hpp"
 }; // namespace tinyso3

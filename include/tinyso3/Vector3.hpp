@@ -73,5 +73,9 @@ public:
     inline const Type& z() const { return data[2][0]; }
 };
 
+using Vector3f = Vector3<float>;
+using Vector3d = Vector3<double>;
+using Vector3ld = Vector3<long double>;
+
 #include "impl/Vector3_impl.hpp"
 }; // namespace tinyso3

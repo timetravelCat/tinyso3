@@ -34,5 +34,9 @@ public:
     AngularVelocity(const Euler<EulerConvention, EulerSequence, Type>& euler, const EulerRate<EulerConvention, EulerSequence, Type>& euler_rate);
 };
 
+using AngularVelocityf = AngularVelocity<float>;
+using AngularVelocityd = AngularVelocity<double>;
+using AngularVelocityld = AngularVelocity<long double>;
+
 #include "impl/AngularVelocity_impl.hpp"
 } // namespace tinyso3

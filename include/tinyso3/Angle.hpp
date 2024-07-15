@@ -80,5 +80,12 @@ private:
     friend class Angle;
 };
 
+template<WrapMode Mode = WrapMode::NEG_PI_TO_PI>
+using Anglef = Angle<Mode, float>;
+template<WrapMode Mode = WrapMode::NEG_PI_TO_PI>
+using Angled = Angle<Mode, double>;
+template<WrapMode Mode = WrapMode::NEG_PI_TO_PI>
+using Angleld = Angle<Mode, long double>;
+
 #include "impl/Angle_impl.hpp"
 }; // namespace tinyso3

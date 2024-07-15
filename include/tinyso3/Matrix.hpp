@@ -151,5 +151,12 @@ private:
     inline void initializer(const U& value);
 };
 
+template<size_t M, size_t N>
+using Matrixf = Matrix<M, N, float>;
+template<size_t M, size_t N>
+using Matrixd = Matrix<M, N, double>;
+template<size_t M, size_t N>
+using Matrixld = Matrix<M, N, long double>;
+
 #include "impl/Matrix_impl.hpp"
 }; // namespace tinyso3

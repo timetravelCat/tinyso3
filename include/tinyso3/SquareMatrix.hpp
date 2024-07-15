@@ -86,5 +86,12 @@ private:
     friend class RotationMatrix;
 };
 
+template<size_t M>
+using SquareMatrixf = SquareMatrix<M, float>;
+template<size_t M>
+using SquareMatrixd = SquareMatrix<M, double>;
+template<size_t M>
+using SquareMatrixld = SquareMatrix<M, long double>;
+
 #include "impl/SquareMatrix_impl.hpp"
 } // namespace tinyso3

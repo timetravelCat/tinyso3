@@ -86,5 +86,12 @@ public:
     Euler(const Quaternion<QuaternionConvention, Type>& quaternion);
 };
 
+template<typename EulerConvention = TINYSO3_DEFAULT_EULER_ANGLE_CONVENTION, typename EulerSequence = TINYSO3_DEFAULT_EULER_ANGLE_SEQUENCE>
+using Eulerf = Euler<EulerConvention, EulerSequence, float>;
+template<typename EulerConvention = TINYSO3_DEFAULT_EULER_ANGLE_CONVENTION, typename EulerSequence = TINYSO3_DEFAULT_EULER_ANGLE_SEQUENCE>
+using Eulerd = Euler<EulerConvention, EulerSequence, double>;
+template<typename EulerConvention = TINYSO3_DEFAULT_EULER_ANGLE_CONVENTION, typename EulerSequence = TINYSO3_DEFAULT_EULER_ANGLE_SEQUENCE>
+using Eulerld = Euler<EulerConvention, EulerSequence, long double>;
+
 #include "impl/Euler_impl.hpp"
 } // namespace tinyso3
