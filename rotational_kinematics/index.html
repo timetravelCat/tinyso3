@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+        <title>Rotational Kinematics - tinyso3</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        
+        
+        
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+            <link rel="stylesheet" href="../assets/css/darcula-highlight.min.css">
+
+        <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="../assets/css/dracula-ui.min.css">
+        <link rel="stylesheet" href="../assets/css/mkdocs.min.css">
+
+        
+            <link  rel="icon" type="image/x-icon" href="../assets/img/favicon.ico">
+        
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+                <script>hljs.initHighlightingOnLoad();</script>
+
+</head>
+
+<body class="drac-bg-black-secondary drac-text-grey-ternary drac-text drac-scrollbar-purple">
+
+    <main class="d-flex">
+
+        <!-- block sidebar -->
+            <nav id="sidebar" class="sidebar drac-bg-black">
+    <div class="custom-menu">
+        <button type="button" id="sidebarCollapse" class="btn btn-primary">
+            <i class="fa fa-bars"></i>
+            <span class="sr-only">Menu</span>
+        </button>
+    </div>
+
+    <div class="p-4">
+        
+            <img class="logo" src="../tinyso3.jpg" height="150px">
+        
+
+        <div class="drac-text-center">
+            
+                <span class="drac-text drac-line-height drac-text-white">tinyso3</span>
+            
+        </div>
+
+        <div class="drac-box flex-column">
+            <ul class="dot-ul">
+                <li><div class="dot-li drac-bg-cyan"></div></li>
+                <li><div class="dot-li drac-bg-green"></div></li>
+                <li><div class="dot-li drac-bg-orange"></div></li>
+                <li><div class="dot-li drac-bg-pink"></div></li>
+                <li><div class="dot-li drac-bg-purple"></div></li>
+                <li><div class="dot-li drac-bg-red"></div></li>
+                <li><div class="dot-li drac-bg-yellow"></div></li>
+            </ul>
+        </div>
+
+        <hr class="drac-divider" />
+
+        <!-- block menu -->
+        <ul class="mb-5 drac-list drac-list-none">
+            
+            <li class="drac-box">
+                <a href=".."
+                    class="
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Home
+                </a>
+            </li>
+            <li class="drac-box">
+                <a href="../rotation_matrix/"
+                    class="
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Rotation Matrix
+                </a>
+            </li>
+            <li class="drac-box">
+                <a href="../euler_angles/"
+                    class="
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Euler Angles
+                </a>
+            </li>
+            <li class="drac-box">
+                <a href="../axis_angle/"
+                    class="
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Axis-Angle
+                </a>
+            </li>
+            <li class="drac-box">
+                <a href="../quaternion/"
+                    class="
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Quaternion
+                </a>
+            </li>
+            <li class="drac-box">
+                <a href="./"
+                    class=" active 
+                    drac-anchor d-inline-flex align-items-center border-0 drac-text-purple--hover">
+                    Rotational Kinematics
+                </a>
+            </li>
+        </ul>
+        <!-- endblock -->
+    </div>
+</nav>
+        <!-- endblock -->
+
+        <nav class="divider drac-bg-purple-cyan"></nav>
+
+        <div class="content">
+            <!-- block header -->
+                <header>
+    <nav class="navbar navbar-expand-xl drac-bg-purple">
+        <div class="container-fluid">
+            
+            <button class="navbar-toggler w-100 text-center" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsMenu"
+                aria-controls="navbarsMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse flex-column ml-auto" id="navbarsMenu">
+                <ul class="navbar-nav text-md-center">
+
+                    <!-- block preview -->
+                    <li class="nav-item">
+                            
+        <div class="container">
+            <div class="row row-preview">
+                <div class="col">
+                    <a href="../quaternion/"
+                        class="btn-preview drac-btn drac-btn-outline drac-text-white drac-text-cyan-green--hover">
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </div>
+                <div class="col">
+                    <a 
+                        class="btn-preview drac-btn drac-text-white--hover disabled" style="padding-left: 3%;">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+                    </li>
+                    <!--  endblock -->
+
+                    <!-- block search -->
+                    <li class="nav-item"><div role="search" class="search-box">
+	<form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+		<input type="text" name="q" class="drac-input drac-input-search drac-input-white drac-text-white drac-bg-black-secondary"
+		placeholder="Search docs" title="Type search term here" />
+	</form>
+</div>
+                    </li>
+                    <!--  endblock -->
+
+                    <!-- block source -->
+                    <li class="nav-item">
+                        
+                    </li>
+                    <!--  endblock -->
+
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+</header>
+            <!-- endblock -->
+
+            <!-- block content -->
+                <section class="p-md-5 section-content">
+    <article>
+        <p><h1 id="rotational-kinematics">Rotational Kinematics<a class="headerlink" href="#rotational-kinematics" title="Permanent link">&para;</a></h1>
+<p>Here, Three topics are described.</p>
+<ul>
+<li>Definition of angular velocity</li>
+<li>Derivative of Rotation Matrix </li>
+<li>Relationship between <strong>Angular Velocity</strong> and <strong>Euler Rate</strong></li>
+</ul>
+<hr />
+<h2 id="definition-of-angular-velocity">Definition of angular velocity<a class="headerlink" href="#definition-of-angular-velocity" title="Permanent link">&para;</a></h2>
+<p>Let frame <span class="arithmatex">\(\vec{B}\)</span> rotate with respect to frame <span class="arithmatex">\(\vec{I}\)</span>.</p>
+<p>The angular velocity of frame <span class="arithmatex">\(\vec{B}\)</span> respect to frame <span class="arithmatex">\(\vec{I}\)</span> is denoted by <span class="arithmatex">\(\vec{\omega}_{BI} = -\vec{\omega}_{IB}\)</span></p>
+<p>Starts with a basic theorem, without demonstration, </p>
+<div class="arithmatex">\[
+\dot{\vec{I}}^T =  0, \ \ \dot{\vec{B}}^T =  \vec{\omega}_{BI} \times \vec{B}^T
+\]</div>
+<hr />
+<h2 id="derivative-of-rotation-matrix">Derivative of Rotation Matrix<a class="headerlink" href="#derivative-of-rotation-matrix" title="Permanent link">&para;</a></h2>
+<div class="arithmatex">\[B^T R_{BI} = I^T\]</div>
+<p>Take derivative of both side,</p>
+<div class="arithmatex">\[\vec{\omega}_{BI} \times \vec{B}^TR_{BI} + \vec{B}^T \dot{R}_{BI} = \vec{B}^T \vec{\omega}_{BI}^B \times \vec{B}^TR_{BI} + \vec{B}^T \dot{R}_{BI} = 0\]</div>
+<div class="arithmatex">\[\therefore \ \ \dot{R}_{BI}= R_{BI} [\vec{\omega}_{BI}^B]^\times\]</div>
+<p>or, from</p>
+<div class="arithmatex">\[I^T R_{IB} = B^T\]</div>
+<p>derive </p>
+<div class="arithmatex">\[\therefore \ \ \dot{R}_{IB}= - [\vec{\omega}_{BI}^B]^\times R_{IB}\]</div>
+<hr />
+<h2 id="relationship-between-angular-velocity-and-euler-rate">Relationship between <strong>Angular Velocity</strong> and <strong>Euler Rate</strong><a class="headerlink" href="#relationship-between-angular-velocity-and-euler-rate" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>PASSIVE or ACTIVE does not affects relationship between <strong>Angular Velocity</strong> and <strong>Euler Rate</strong>.</p>
+</li>
+<li>
+<p>However, <strong>Intrinsic</strong> or <strong>Extrinsic</strong> affects relationship between <strong>Angular Velocity</strong> and <strong>Euler Rate</strong>.</p>
+</li>
+<li>
+<p>Here we derive relationship between <strong>Angular Velocity</strong> and <strong>Euler Rate</strong> of generalized euler angle <span class="arithmatex">\(\alpha \rightarrow \beta \rightarrow \gamma\)</span> with arbitrary axis of rotation.</p>
+</li>
+</ol>
+<h3 id="case-of-intrinsic-euler-angle">Case of Intrinsic Euler Angle<a class="headerlink" href="#case-of-intrinsic-euler-angle" title="Permanent link">&para;</a></h3>
+<p><span class="arithmatex">\(R = R_{\gamma \leftarrow \beta \leftarrow \alpha \leftarrow I} = R_{\gamma}R_{\beta}R_{\alpha}\)</span> (PASSIVE)</p>
+<p>In case of principal axis rotation, </p>
+<div class="arithmatex">\[\therefore \ \ -\dot{R_i}R_i^T= [1_i]^\times{\dot{\theta}}_i\]</div>
+<p>and using,</p>
+<div class="arithmatex">\[[Rv]^\times=Rv^\times R^T\]</div>
+<div class="arithmatex">\[
+\dot{R}=\dot{R}_\gamma R_\beta R_\alpha + R_\gamma \dot{R}_\beta R_\alpha + R_\gamma R_\beta \dot{R}_\alpha = - [\omega]^\times (R_\gamma R_\beta R_\alpha)
+\]</div>
+<div class="arithmatex">\[
+\therefore \ \ \omega = [R_\gamma R_\beta 1_1 \ \ R_\gamma 1_2 \ \ 1_3]
+\begin{bmatrix}
+\dot{\alpha} \\
+\dot{\beta} \\ 
+\dot{\gamma} 
+\end{bmatrix}
+\]</div>
+<h3 id="case-of-extrinsic-euler-angle">Case of Extrinsic Euler Angle<a class="headerlink" href="#case-of-extrinsic-euler-angle" title="Permanent link">&para;</a></h3>
+<p><span class="arithmatex">\(R = R_{I \rightarrow \alpha \rightarrow \beta \rightarrow \gamma} = R_{\alpha}R_{\beta}R_{\gamma}\)</span> (PASSIVE)</p>
+<div class="arithmatex">\[
+\therefore \ \ \omega = [1_1 \ \ R_\alpha 1_2 \ \ R_\alpha R_\beta 1_1]
+\begin{bmatrix}
+\dot{\alpha} \\
+\dot{\beta} \\ 
+\dot{\gamma} 
+\end{bmatrix}
+\]</div></p>
+    </article>
+</section>
+            <!-- endblock -->
+
+            <!-- block footer -->
+                <footer>
+    <div class="d-flex flex-sm-row justify-content-between py-2 border-top drac-text-black drac-bg-cyan-green">
+        <a href="https://github.com/dracula/mkdocs" target="_blank" style="padding-left: 1%;"
+            class="footer-text drac-anchor drac-text-black drac-text-purple--hover">
+            Made with Dracula Theme for MkDocs
+        </a>
+    </div>
+</footer>
+            <!-- endblock -->
+        </div>
+
+    </main>
+
+        <script>var base_url = '..';</script>
+        <script src="../assets/js/jquery-3.3.1.slim.min.js"></script>
+        <script src="../assets/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/js/mkdocs.js"></script>
+			<script src="../javascripts/mathjax.js" defer></script>
+			<script src="https://polyfill.io/v3/polyfill.min.js?features=es6" defer></script>
+			<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+			<script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js" defer></script>
+			<script src="../search/main.js" defer></script>
+
+</body>
+
+</html>
