@@ -24,3 +24,8 @@ extra_javascript:
 
 nav:
   - Home: index.md
+  - Rotation Matrix: rotation_matrix.md
+  - Euler Angles: euler_angles.md
+  - Axis-Angle: axis_angle.md
+  - Quaternion: quaternion.md
+  - Rotational Kinematics: rotational_kinematics.md

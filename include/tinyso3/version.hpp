@@ -5,7 +5,7 @@
 #define TINYSO3_MAJOR_VERSION 0
 #define TINYSO3_MINOR_VERSION 2
 #define TINYSO3_PATCH_VERSION 0
-#define TINYSO3_TWEAK_VERSION "cd2cfeb"
+#define TINYSO3_TWEAK_VERSION "a909e21"
 
 #if __cplusplus < 201103L
 #error This library requires at least a C++11 compliant compiler
